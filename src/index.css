@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+div::-webkit-scrollbar {
+  width: 10px; /* Set the width of the scrollbar */
+}
+
+div::-webkit-scrollbar-thumb {
+  background-color: rgb(87, 87, 87); /* Set the color of the thumb */
+  border-radius: 10px; /* Set the border radius of the thumb */
+}
+
+div::-webkit-scrollbar-track {
+  background-color: rgb(44, 44, 44); /* Set the color of the track */
+  border-radius: 10px;
+}
+
+/* For Firefox */
+div {
+  scrollbar-width: thin; /* Set the width of the scrollbar */
+  scrollbar-color: #062e07 #f1f1f1; /* Set the color of the thumb and track */
+}
