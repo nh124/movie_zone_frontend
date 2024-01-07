@@ -57,7 +57,7 @@ const Movie = () => {
   const VideoPlayers = () => {
     return (
       <div
-        className={`w-full h-[130vh] sm:h-[120vh] bg-black/70 absolute top-0 left-0 z-30 ${
+        className={`w-full h-screen bg-black/70 absolute top-0 left-0 z-30 ${
           playTrailers ? "flex" : "hidden"
         }`}
       >

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import logo from "../assets/logo.png";
 import { CiSearch, CiLogout } from "react-icons/ci";
 import { IoCloseOutline, IoPerson } from "react-icons/io5";
@@ -30,6 +30,7 @@ const Navbar = ({ setShowLoading }) => {
         console.log(error);
       });
     navigate("/");
+    window.location.reload();
     localStorage.removeItem("token");
     setShowUserMany(false);
   };
@@ -39,7 +40,10 @@ const Navbar = ({ setShowLoading }) => {
       <div className="flex fle-row justify-between items-center w-full  xl:w-[1920px] relative">
         <button
           className="flex flex-row items-center w-auto text-xl font-bold text-cyan-50 z-10"
-          onClick={() => navigate("/")}
+          onClick={() => {
+            navigate("/");
+            window.location.reload();
+          }}
         >
           <div className="sm:w-[70px] w-[56px] px-3 py-3">
             <img className="w-full h-full object-cover" src={logo} alt="logo" />

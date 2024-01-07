@@ -82,12 +82,15 @@ const MoreDetailsCard = ({
     >
       <div className="w-full h-full relative bg-black/70 z-30">
         <div
-          className={`sm:w-[700px] sm:h-[700px] absolute bg-[#283747] sm:top-[20%] left-1/2 transform -translate-x-1/2 px-4 py-4 w-full h-auto top-0 duration-400 `}
+          className={`sm:w-[700px] sm:h-[700px] absolute bg-[#283747] sm:top-1/2 sm:transform sm:-translate-y-1/2 left-1/2 transform -translate-x-1/2 px-4 py-4 w-full h-auto top-0 duration-400 `}
         >
-          <div className="w-full h-full flex sm:flex-row relative flex-col gap-3 sm:gap-0">
-            <button className="absolute right-1" onClick={() => clearData()}>
-              <IoMdClose size="20" color="white" />
-            </button>
+          <button
+            className="absolute right-0 top-0 p-2 bg-gray-700 hover:scale-105 duration-300 z-10 "
+            onClick={() => clearData()}
+          >
+            <IoMdClose size="20" color="white" />
+          </button>
+          <div className="w-full h-full flex sm:flex-row relative flex-col gap-3 sm:gap-0 p-5">
             <div className="w-full h-fit sm:h-full flex flex-col items-center">
               <div className="w-full h-[250px] p-4 flex justify-center items-center">
                 <div className="w-[220px] h-[220px] bg-slate-500 rounded-full overflow-hidden shadow-lg">
@@ -125,7 +128,7 @@ const MoreDetailsCard = ({
                   overflowX: "hidden",
                   transition: "height 0.3s ease",
                 }}
-                className={`w-full  text-gray-400 overflow-x-hidden relative transition-height  shadow-lg p-2 max-w-[260px]`}
+                className={`w-full  text-gray-400 overflow-x-hidden relative transition-height  shadow-lg p-2 max-w-full sm:max-w-[260px]`}
                 ref={biographyRef}
               >
                 {personDetails?.biography}{" "}

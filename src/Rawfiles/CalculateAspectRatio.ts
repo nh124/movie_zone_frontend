@@ -1,9 +1,7 @@
-import React from "react";
-
 const CalculateAspectRatio = () => {
   const maxWidths = {
     small: window.innerWidth - 20,
-    medium: window.innerWidth - 100,
+    medium: window.innerWidth - 600,
     large: window.innerWidth - 1500,
   };
 

@@ -3,6 +3,7 @@ import { GoDot, GoDotFill } from "react-icons/go";
 import ParseSplashImageData from "../API_PARSER/ParseSplashImageData";
 import ScoreCircle from "./ScoreCircle";
 import DateConverter from "../Rawfiles/DateConverter";
+import { useNavigate } from "react-router-dom";
 const SplashImage = () => {
   const splashImageData = ParseSplashImageData();
   const convertRating = (rating, stars) => {
@@ -12,7 +13,7 @@ const SplashImage = () => {
   const [textLimit, setTextLimit] = useState(100);
   const [bannerIndex, setBannerIndex] = useState(0);
   const ratingAvg = Math.round(splashImageData[bannerIndex]?.vote_average);
-
+  const navigate = useNavigate();
   // const rating = Math.round(ratingAvg)
   // const starsArray = Array.from({ length: 5 }, (_, index) => {
   //   const fillStar = index < rating;
@@ -87,7 +88,12 @@ const SplashImage = () => {
             className="px-2 py-2  rounded-md hover:bg-blue-800 duration-300 border-2
            border-gray-400 text-gray-400 relative group"
           >
-            <span className="relative z-10 text-gray-400 group-hover:text-gray-800 font-bold duration-300">
+            <span
+              className="relative z-10 text-gray-400 group-hover:text-gray-800 font-bold duration-300"
+              onClick={() =>
+                navigate(`/movie/${splashImageData[bannerIndex].id}`)
+              }
+            >
               Learn More
             </span>
             <div className="w-0 duration-300 group-hover:w-full h-full absolute top-0 bg-gray-400 left-0 z-0"></div>

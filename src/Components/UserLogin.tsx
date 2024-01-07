@@ -8,6 +8,7 @@ import UserManager from "../API/UserSignUp";
 const UserLogin = ({ showLogin, setShowLoading }) => {
   const [signUpChoice, setSignUpChoice] = useState("Login");
   const [passwordRecovery, setPasswordRecovery] = useState(false);
+  const [phoneVerification, setPhoneVerification] = useState(false);
   const [registerForm, setRegisterForm] = useState({
     Name: "",
     Email: "",
@@ -42,7 +43,6 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
         })
         .catch((error) => {
           const { status, data } = error.response;
-
           setStatus({
             status: status,
             message: data.message,
@@ -141,7 +141,7 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
           }`}
         ></div>
         <div
-          className={`sm:w-[450px] sm:max-w-[450px] w-[100%] sm:h-[55%] h-[100%] flex flex-col bg-[#1F2937] rounded-lg text-gray-400 duration-500 relative overflow-hidden ${
+          className={`sm:w-[450px] sm:max-w-[450px] w-[100%] sm:h-[650px] h-[100%] flex flex-col bg-[#1F2937] rounded-lg text-gray-400 duration-500 relative overflow-hidden ${
             showLogin ? "translate-y-0" : "-translate-y-[200%]"
           }`}
         >
@@ -173,15 +173,18 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
             <span className="text-xl">Welcome to MovieZone</span>
           </div>
 
-          <div className="w-full h-[80%] flex flex-col items-center gap-3 overflow-hidden">
-            <DualTab
-              setDefault={setDefault}
-              setTab={setSignUpChoice}
-              setStatus={setStatus}
-              currentValue={signUpChoice}
-              DuoTabType="signUp"
-            />
-            <div className="flex flex-row w-full h-full">
+          <div className="w-full h-fit flex flex-col items-center gap-3 overflow-hidden">
+            <div className="w-full h-fit">
+              <DualTab
+                setDefault={setDefault}
+                setTab={setSignUpChoice}
+                setStatus={setStatus}
+                currentValue={signUpChoice}
+                DuoTabType="signUp"
+              />
+            </div>
+
+            <div className="flex flex-row w-full h-auto">
               <div
                 className={`w-full flex justify-center py-6 flex-shrink-0 duration-300 ${
                   signUpChoice === "Login"
