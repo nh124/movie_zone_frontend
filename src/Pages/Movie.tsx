@@ -19,6 +19,7 @@ import GetMovieDetails from "../API_PARSER/GetMovieDetails";
 import { IoMdClose } from "react-icons/io";
 import { setNotificationStatus } from "../Redux/NotificationReducer";
 import MoreDetailsCard from "../Components/MoreDetailsCard";
+import ImageEnlarge from "../Components/ImageEnlarge";
 const Movie = () => {
   const { movieId } = useParams();
   const query_videos = GetMovieDetails(movieId, "videos");
@@ -33,6 +34,12 @@ const Movie = () => {
   const [selectedPersonID, setSelectedPersonID] = useState("");
   const [showPeopleDetails, setShowPeopleDetails] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState("");
+  const [SelectedImageArray, setSelectedImageArray] = useState([]);
+  const [showImages, setShowImages] = useState(false);
+
+  useEffect(() => {
+    if (SelectedImageArray.length > 0) setShowImages(true);
+  }, [SelectedImageArray, setSelectedImageArray, showImages]);
 
   useEffect(() => {
     if (notificationStatus) {
@@ -75,10 +82,16 @@ const Movie = () => {
 
   return (
     <div
-      className={`w-full ${
-        showPeopleDetails || playTrailers ? "h-screen" : "h-fit"
+      className={`w-full relative ${
+        showPeopleDetails || playTrailers || showImages ? "h-screen" : "h-fit"
       } overflow-hidden`}
     >
+      <ImageEnlarge
+        setSelectedImageArray={setSelectedImageArray}
+        SelectedImageArray={SelectedImageArray}
+        showImages={showImages}
+        setShowImages={setShowImages}
+      />
       <PageLayout showLogin={showLogin} setShowLoading={setShowLoading}>
         <button
           className={`w-[250px] sm:w-[340px] h-[50px] mt-[4%] flex items-center bg-[#283747] px-3 rounded-md fixed top-0 right-0 gap-3 text-gray-400 z-50 duration-300 ${
@@ -114,6 +127,7 @@ const Movie = () => {
           setSelectedPersonID={setSelectedPersonID}
           setSelectedImageURL={setSelectedImageURL}
           setShowPeopleDetails={setShowPeopleDetails}
+          setSelectedImageArray={setSelectedImageArray}
         />
         <MovieComments movieId={movieId} />
       </PageLayout>

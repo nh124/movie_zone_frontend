@@ -5,6 +5,7 @@ import Form from "./Form";
 import DualTab from "./DualTab";
 import PasswordRecovery from "./PasswordRecovery";
 import UserManager from "../API/UserSignUp";
+import PhoneVerification from "./PhoneVerification";
 const UserLogin = ({ showLogin, setShowLoading }) => {
   const [signUpChoice, setSignUpChoice] = useState("Login");
   const [passwordRecovery, setPasswordRecovery] = useState(false);
@@ -39,7 +40,7 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
     if (submitStatus.registerFormSubmitted) {
       register_user(registerForm)
         .then(() => {
-          setSignUpChoice("Login");
+          setPhoneVerification(true);
         })
         .catch((error) => {
           const { status, data } = error.response;
@@ -107,7 +108,11 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
     }));
   };
 
-  const setDefault = (close) => {
+  useEffect(() => {
+    console.log(loginForm);
+  }, [loginForm]);
+
+  useEffect(() => {
     setLoginForm({
       Email: "",
       Password: "",
@@ -122,6 +127,9 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
       Phone: "",
       Password: "",
     });
+  }, [signUpChoice, showLogin, phoneVerification, passwordRecovery]);
+
+  const setDefault = (close) => {
     if (close === "close") {
       setShowLoading(false);
       setSignUpChoice("Login");
@@ -151,6 +159,12 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
             setShowLoading={setShowLoading}
             passwordRecovery={passwordRecovery}
             setPasswordRecovery={setPasswordRecovery}
+          />
+          <PhoneVerification
+            setSignUpChoice={setSignUpChoice}
+            setShowLoading={setShowLoading}
+            phoneVerification={phoneVerification}
+            setPhoneVerification={setPhoneVerification}
           />
 
           <div className="absolute top-0 right-0 group">

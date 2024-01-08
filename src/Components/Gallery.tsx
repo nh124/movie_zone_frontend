@@ -1,4 +1,10 @@
-const Gallery = ({ imageType, setImageType, images, imageTypes }) => {
+const Gallery = ({
+  imageType,
+  setImageType,
+  images,
+  imageTypes,
+  setSelectedImageArray,
+}) => {
   return (
     <div className="w-full h-[300px] bg-gradient-to-t from-[#283747] shadow-lg rounded-lg px-3 py-3 flex flex-col">
       <div className=" text-gray-300 font-semibold flex justify-between items-center">
@@ -21,6 +27,7 @@ const Gallery = ({ imageType, setImageType, images, imageTypes }) => {
         {imageType === "Backdrops" &&
           images?.backdrops?.map((image) => (
             <button
+              onClick={() => setSelectedImageArray(images?.backdrops)}
               className="flex-shrink-0 w-[300px] h-full overflow-hidden rounded-md shadow-lg hover:scale-105 duration-300"
               key={image.id}
             >
@@ -34,6 +41,7 @@ const Gallery = ({ imageType, setImageType, images, imageTypes }) => {
         {imageType === "Posters" &&
           images?.posters?.map((image) => (
             <button
+              onClick={() => setSelectedImageArray(images?.posters)}
               className="flex-shrink-0 w-[300px] h-full overflow-hidden rounded-md shadow-lg hover:scale-105 duration-300"
               key={image.id}
             >

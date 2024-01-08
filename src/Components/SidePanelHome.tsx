@@ -7,7 +7,8 @@ import GetMovieDetails from "../API_PARSER/GetMovieDetails";
 import MovieManager from "../API/MovieManager";
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-
+import { IoIosStar } from "react-icons/io";
+import { MdAutoGraph } from "react-icons/md";
 const SidePanelHome = ({ collectionTab, setCollectionTab }) => {
   const { get_user, setExpiredToken } = UserInformationManager();
   const storedTokenObject = localStorage.getItem("token");
@@ -37,6 +38,10 @@ const SidePanelHome = ({ collectionTab, setCollectionTab }) => {
   //     }
   //   }, [getMovieDetails, convertToJson, moviesIds]);
   const navigate = useNavigate();
+  const calculateScoreAverage = (voting_average) => {
+    const ratingAvg = Math.round(voting_average);
+    return `${ratingAvg * 10}%`;
+  };
   useEffect(() => {
     if (!convertToJson) return;
 
@@ -128,9 +133,6 @@ const SidePanelHome = ({ collectionTab, setCollectionTab }) => {
                   key={movie?.id}
                   onClick={() => navigate(`/movie/${movie.id}`)}
                 >
-                  <button className="absolute -top-2 -right-3 rounded-full bg-slate-800 shadow-xl border border-gray-300 hover:scale-110 duration-300">
-                    <IoMdClose size={22} />
-                  </button>
                   <div className="w-[20%] h-full overflow-hidden">
                     <img
                       src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
@@ -140,18 +142,20 @@ const SidePanelHome = ({ collectionTab, setCollectionTab }) => {
                   </div>
                   <div className="w-[80%] h-full py-3 px-3 font-bold flex flex-col items-start gap-3">
                     <span>{movie?.title}</span>
-                    <div className="flex flex-row gap-3 text-sm">
-                      <div className="flex flex-row] gap-2">
-                        <div>
-                          <FaThumbsUp size={19} />
-                        </div>
-                        <span>100</span>
+                    <div
+                      className="flex flex-row gap-3 text-sm"
+                      title="Average Score"
+                    >
+                      <div className="flex flex-row items-center gap-1">
+                        <IoIosStar />
+                        {calculateScoreAverage(movie?.vote_average)}
                       </div>
-                      <div className="flex flex-row] gap-2">
-                        <div>
-                          <FaThumbsDown size={19} />
-                        </div>
-                        <span>100</span>
+                      <div
+                        className="flex flex-row items-center gap-1"
+                        title="Vote Count"
+                      >
+                        <MdAutoGraph />
+                        {movie?.vote_count}
                       </div>
                     </div>
                   </div>

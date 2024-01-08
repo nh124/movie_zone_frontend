@@ -32,6 +32,26 @@ const MovieComments = ({ movieId }) => {
   const { addComment, getComment, updateLike, updateDisLike } =
     CommentManager();
 
+  const getTime = (time) => {
+    const currentTime = new Date();
+    const newTime = new Date(time);
+    const timeElapsed = currentTime - newTime;
+    console.log(timeElapsed);
+    const seconds = Math.floor(timeElapsed / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(months / 12);
+
+    if (hours < 1 && minutes < 1) return `a few seconds ago`;
+    if (hours <= 0 && minutes > 0) return `${minutes} minutes ago`;
+    if (hours > 0) return `${hours} hours ago`;
+    if (hours > 24 && days > 0) return `${days} days ago`;
+    if (days > 30 && months > 0) return `${months} months ago`;
+    if (months > 12 && years > 0) return `${years} years ago`;
+  };
+
   useEffect(() => {
     setGetCommentsStatus(true);
   }, []);
@@ -186,7 +206,8 @@ const MovieComments = ({ movieId }) => {
                       <button className="font-bold text-gray-300 text-lg text-blue-400 w-fit">
                         {comment?.name}
                       </button>
-                      <span>10 minutes ago</span>
+                      {console.log(comment)}
+                      <span>{getTime(comment?.date)}</span>
                     </div>
                     <div className="flex flex-row gap-3 px-3">
                       {comment?.name === user?.name && (
@@ -217,7 +238,7 @@ const MovieComments = ({ movieId }) => {
                   </div>
                 </div>
 
-                <div className="w-fit h-auto absolute -bottom-7 -right-3 flex justify-end px-3 py-2 gap-4 rounded-md bg-slate-800 text-sm">
+                {/* <div className="w-fit h-auto absolute -bottom-7 -right-3 flex justify-end px-3 py-2 gap-4 rounded-md bg-slate-800 text-sm">
                   <button
                     className="hover:scale-110 duration-300 shadow-lg flex flex-row gap-2"
                     onClick={() => UpdateLike(comment?.id)}
@@ -232,7 +253,7 @@ const MovieComments = ({ movieId }) => {
                     <FaThumbsDown size={20} color="gray" />
                     {comment?.dislike}
                   </button>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>

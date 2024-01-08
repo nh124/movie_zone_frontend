@@ -11,6 +11,7 @@ const MovieDetails = ({
   setSelectedImageURL,
   setSelectedPersonID,
   setShowPeopleDetails,
+  setSelectedImageArray,
 }) => {
   const [expandReadMore, setExpandReadMore] = useState(true);
   const [details, setDetails] = useState({});
@@ -105,6 +106,7 @@ const MovieDetails = ({
           imageType={imageType}
           setImageType={setImageType}
           images={images}
+          setSelectedImageArray={setSelectedImageArray}
         />
       </div>
       <div className="w-full h-[400px] px-3 py-[2%] flex flex-col gap-4">
