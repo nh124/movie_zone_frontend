@@ -1,8 +1,11 @@
 /* eslint-disable no-useless-catch */
 import axios from "axios";
 
+type favoriteForm = {
+  favorite: string;
+};
 const UserListManager = () => {
-  const AddToUserList = async (userListForm, token) => {
+  const AddToUserList = async (userListForm: favoriteForm, token: string) => {
     try {
       const response = await axios.post(
         import.meta.env.VITE_SERVER_URL + "/addToUserList",
@@ -22,7 +25,7 @@ const UserListManager = () => {
     }
   };
 
-  const GetUserList = async (token) => {
+  const GetUserList = async (token: string) => {
     try {
       const response = await axios.get(
         import.meta.env.VITE_SERVER_URL + "/getUserList",
@@ -41,7 +44,7 @@ const UserListManager = () => {
     }
   };
 
-  const updateUserList = async (userListForm, token) => {
+  const updateUserList = async (userListForm: favoriteForm, token: string) => {
     try {
       const response = await axios.put(
         import.meta.env.VITE_SERVER_URL + "/updateUserList",
@@ -61,7 +64,7 @@ const UserListManager = () => {
     }
   };
 
-  const getUserLists = async (token) => {
+  const getUserLists = async (token: string) => {
     try {
       const response = await axios.get(
         import.meta.env.VITE_SERVER_URL + "/getUserList",
@@ -80,7 +83,10 @@ const UserListManager = () => {
     }
   };
 
-  const deleteFromUserList = async (userListForm, token) => {
+  const deleteFromUserList = async (
+    userListForm: favoriteForm,
+    token: string
+  ) => {
     try {
       const response = await axios.put(
         import.meta.env.VITE_SERVER_URL + "/deleteFromUserList",

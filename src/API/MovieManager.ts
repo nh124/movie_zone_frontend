@@ -2,6 +2,12 @@
 import axios from "axios";
 import Filter from "../Rawfiles/Filter";
 
+type filterType = {
+  sort_by: string;
+  vote_average: string;
+  year: string;
+  genre: string;
+};
 const MovieManager = () => {
   const token = import.meta.env.VITE_MOVIE_AUTHORIZATION_TOKEN;
   const getLatestMovies = async () => {
@@ -73,7 +79,7 @@ const MovieManager = () => {
     }
   };
 
-  const searchMovie = async (searchMovieIndex: number, search) => {
+  const searchMovie = async (searchMovieIndex: number, search: string) => {
     const queryParams = {
       language: "en-US",
       page: searchMovieIndex.toString(),
@@ -121,7 +127,10 @@ const MovieManager = () => {
       throw error;
     }
   };
-  const getDiscover = async (DiscoverMoviePageIndex: number, filter) => {
+  const getDiscover = async (
+    DiscoverMoviePageIndex: number,
+    filter: filterType
+  ) => {
     const queryParams = Filter({
       page: DiscoverMoviePageIndex,
       primary_release_year: filter.year,
@@ -148,14 +157,15 @@ const MovieManager = () => {
     }
   };
 
-  const getPeopleDetailsAPI_URL = (type, personID) => {
+  const getPeopleDetailsAPI_URL = (type: string, personID: number) => {
     const base_url = import.meta.env.VITE_MOVIE_API_URL;
     if (type === "credit") return base_url + `person/${personID}/movie_credits`;
     if (type === "details") return base_url + `person/${personID}`;
   };
 
-  const getPeopleDetails = async (type, personID) => {
+  const getPeopleDetails = async (type: string, personID: number) => {
     const url = getPeopleDetailsAPI_URL(type, personID);
+    if (url === undefined) throw new Error("Url not available");
     try {
       const response = await axios.get(url, {
         headers: {
@@ -170,15 +180,15 @@ const MovieManager = () => {
     }
   };
 
-  const getUrl = (type, movieId) => {
+  // type typeTypes = "details" || "credits" || "video" || "images" || "socials" || "creditDetails";
+
+  const getUrl = (type: string, movieId: number) => {
     const base_url = import.meta.env.VITE_MOVIE_API_URL;
     if (type === "details") return base_url + `movie/${movieId}`;
     if (type === "credits") return base_url + `movie/${movieId}/credits`;
     if (type === "videos") return base_url + `movie/${movieId}/videos`;
     if (type === "images") return base_url + `movie/${movieId}/images`;
     if (type === "socials") return base_url + `movie/${movieId}/external_ids`;
-    if (type === "creditDetails")
-      return base_url + `person/${personID}/movie_credits`;
   };
 
   const getMovieDetails = async (movieId: number, type: string) => {

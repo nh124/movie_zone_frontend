@@ -2,7 +2,14 @@
 import axios from "axios";
 
 const CommentManager = () => {
-  const addComment = async (commentForm, token) => {
+  type commentForm = {
+    movieId: number;
+    comment: string;
+  };
+  type editCommentForm = {
+    comment: string;
+  };
+  const addComment = async (commentForm: commentForm, token: string) => {
     try {
       const response = await axios.post(
         import.meta.env.VITE_SERVER_URL + "/addComment",
@@ -38,7 +45,11 @@ const CommentManager = () => {
     }
   };
 
-  const editComment = async (commentId, token, commentForm) => {
+  const editComment = async (
+    commentId: number,
+    token: string,
+    commentForm: editCommentForm
+  ) => {
     try {
       const response = await axios.put(
         import.meta.env.VITE_SERVER_URL + `/editComment/${commentId}`,
@@ -57,7 +68,7 @@ const CommentManager = () => {
     }
   };
 
-  const updateLike = async (commentId, token) => {
+  const updateLike = async (commentId: number, token: string) => {
     try {
       const response = await axios.put(
         import.meta.env.VITE_SERVER_URL + `/updateLike/${commentId}`,
@@ -74,7 +85,7 @@ const CommentManager = () => {
       throw error;
     }
   };
-  const updateDisLike = async (commentId, token) => {
+  const updateDisLike = async (commentId: number, token: string) => {
     try {
       const response = await axios.put(
         import.meta.env.VITE_SERVER_URL + `/updateDisLike/${commentId}`,
@@ -92,7 +103,7 @@ const CommentManager = () => {
     }
   };
 
-  const deleteComment = async (commentId, token) => {
+  const deleteComment = async (commentId: number, token: string) => {
     try {
       const response = await axios.delete(
         import.meta.env.VITE_SERVER_URL + `/deleteComment/${commentId}`,

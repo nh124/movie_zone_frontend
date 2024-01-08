@@ -1,5 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import CommentManager from "../API/CommentManager";
+
+type updateCommentStatus = {
+  id: number;
+  status: boolean;
+};
+type setUpdateCommentStatus = React.Dispatch<
+  React.SetStateAction<{
+    id: number;
+    status: boolean;
+  }>
+>;
+
+type setGetCommentsStatus = React.Dispatch<React.SetStateAction<boolean>>;
 
 const EditComment = ({
   updateCommentStatus,
@@ -8,6 +21,13 @@ const EditComment = ({
   storedToken,
   commentId,
   setGetCommentsStatus,
+}: {
+  updateCommentStatus: updateCommentStatus;
+  index: number;
+  setUpdateCommentStatus: setUpdateCommentStatus;
+  storedToken: string | undefined;
+  commentId: number;
+  setGetCommentsStatus: setGetCommentsStatus;
 }) => {
   const { editComment } = CommentManager();
   const [updatedComment, setUpdatedComment] = useState({
@@ -21,6 +41,7 @@ const EditComment = ({
   };
 
   const onSubmit = (event) => {
+    if (storedToken === undefined) return;
     if (
       updatedComment.comment === undefined ||
       updatedComment.comment === null ||

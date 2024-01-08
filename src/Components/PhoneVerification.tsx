@@ -2,11 +2,6 @@ import { IoMdClose } from "react-icons/io";
 import logo from "../assets/logo.png";
 import Form from "./Form";
 import { useEffect, useState } from "react";
-// import PasswordRecoveryAPI from "../API/PasswordRecoveryAPI";
-// import UpdatePage from "./UpdatePage";
-import VerifyCode from "../phoneVerification/VerifyCode";
-import UpdatePassword from "../phoneVerification/resetPassword";
-import ResetPassword from "../phoneVerification/resetPassword";
 import UserManager from "../API/UserSignUp";
 import checkLogo from "../assets/Eo_circle_green_checkmark.svg.png";
 

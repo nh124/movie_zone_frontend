@@ -1,4 +1,5 @@
-const RemoveDuplicatesFilter = (movies) => {
+import ResponseResultType from "../Types/responseResultType";
+const RemoveDuplicatesFilter = (movies: Array<ResponseResultType>) => {
   const uniqueIds = new Set();
   const uniqueMovies = movies.filter((movie) => {
     const id = movie.id;

@@ -1,6 +1,7 @@
 import Poster from "./Poster";
 import ParseMovies from "../Rawfiles/ParseMovies";
 import GenreDict from "../API_PARSER/GenreDict";
+import ResponseResultType from "../Types/responseResultType";
 const GridLayout = ({
   start,
   end,
@@ -8,7 +9,7 @@ const GridLayout = ({
 }: {
   start: number;
   end: number;
-  MovieList: [];
+  MovieList: ResponseResultType[];
 }) => {
   const GenreDictionary = GenreDict();
   const parsed_movies = MovieList.map((movie) =>

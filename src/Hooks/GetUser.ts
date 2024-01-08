@@ -2,21 +2,48 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const GetUser = (storedToken, getData, tokenExpired, setExpiredToken) => {
+type tokenForm = {
+  token: string;
+};
+type SetExpiredTokenFunction = (
+  token: string,
+  formData: tokenForm
+) => Promise<void>;
+
+type responseType = {
+  Data: {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+  };
+};
+type GetDataType = (token: string) => Promise<responseType>;
+const GetUser = (
+  storedToken: string,
+  getData: GetDataType,
+  tokenExpired: boolean,
+  setExpiredToken: SetExpiredTokenFunction
+) => {
   const [token, setToken] = useState("");
   const [fetch, setFetch] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({
+    id: 0,
+    email: "",
+    name: "",
+    phone: "",
+  });
   const navigate = useNavigate();
   const removeToken = () => {
     const tokenForm = {
       token: storedToken,
     };
     setExpiredToken(storedToken, tokenForm)
-      .then((response) => {
-        console.log(response);
+      .then(() => {
+        // console.log(response);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        // console.log(error);
       });
     navigate("/");
     localStorage.removeItem("token");
@@ -42,12 +69,12 @@ const GetUser = (storedToken, getData, tokenExpired, setExpiredToken) => {
     }
     if (!fetch) {
       getData(token)
-        .then((response) => {
+        .then((response: responseType) => {
           if (isMounted) {
             setUser(response.Data);
           }
         })
-        .catch((error) => {
+        .catch(() => {
           removeToken();
         })
         .finally(() => {

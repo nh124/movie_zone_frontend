@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import FilterSelector from "./FilterSelector";
 import { setSubmitFilter } from "../Redux/filterReducer";
 import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 import MovieFilters from "../Hooks/MovieFilters";
-// import GetDiscover from "../API_PARSER/GetDiscover";
 
 const Filter = ({ showFilters }: { showFilters: boolean }) => {
   const dispatch = useDispatch();
@@ -14,6 +13,12 @@ const Filter = ({ showFilters }: { showFilters: boolean }) => {
   });
   const [order, setOrder] = useState("desc");
   const filterOptions = MovieFilters();
+  type filterType = {
+    id: number;
+    name: string;
+    alt_name: string;
+    filter: Array<string>;
+  };
   return (
     <div
       className={`w-full h-auto sm:flex flex-row flex-wrap gap-2 py-2 px-2 max-sm:bg-slate-900 rounded-lg ${
@@ -36,7 +41,7 @@ const Filter = ({ showFilters }: { showFilters: boolean }) => {
           </div>
         </button>
       </div>
-      {filterOptions.map((IndFilter) => (
+      {filterOptions.map((IndFilter: filterType) => (
         <FilterSelector
           key={IndFilter.id}
           name={IndFilter.name}

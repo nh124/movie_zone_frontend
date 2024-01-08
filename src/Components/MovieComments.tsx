@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
-import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 import { IoPersonSharp } from "react-icons/io5";
-import { MdDeleteOutline } from "react-icons/md";
 import GetUser from "../Hooks/GetUser";
 import UserInformationManager from "../API/UserInformationManager";
 import CommentManager from "../API/CommentManager";
@@ -10,18 +8,50 @@ import EditComment from "./editComment";
 import DeleteComment from "./DeleteComment";
 import { setNotificationStatus } from "../Redux/NotificationReducer";
 import { useDispatch } from "react-redux";
+import { ReactFormEvent } from "react";
 
-const MovieComments = ({ movieId }) => {
+const MovieComments = ({ movieId }: { movieId: number }) => {
   const { get_user, setExpiredToken } = UserInformationManager();
-  const { deleteComment } = CommentManager();
   const storedTokenObject = localStorage.getItem("token");
-  const storedTokenJson = JSON.parse(storedTokenObject);
-  const storedToken = storedTokenJson?.token;
-  const tokenExpired = storedTokenJson?.expired;
-  const user = GetUser(storedToken, get_user, tokenExpired, setExpiredToken);
-  const [comments, setComments] = useState([]);
+
+  type TokenInfo = {
+    storedToken: string | undefined;
+    tokenExpired: boolean | undefined;
+  };
+  const getToken = (): TokenInfo => {
+    if (storedTokenObject === null) {
+      return {
+        storedToken: undefined,
+        tokenExpired: undefined,
+      };
+    }
+    const storedTokenJson = JSON.parse(storedTokenObject);
+    const storedToken = storedTokenJson?.token;
+    const tokenExpired = storedTokenJson?.expired;
+    return { storedToken, tokenExpired };
+  };
+  const { storedToken, tokenExpired } = getToken();
+
+  const getUser = () => {
+    if (storedToken === undefined || tokenExpired === undefined) return;
+    const user = GetUser(storedToken, get_user, tokenExpired, setExpiredToken);
+    return user;
+  };
+
+  const user = getUser();
+  const [comments, setComments] = useState([
+    {
+      id: 0,
+      comment: "",
+      date: "",
+      dislike: 0,
+      like: 0,
+      movieId: 0,
+      name: "",
+    },
+  ]);
   const [textareaHeight, setTextareaHeight] = useState("50px");
-  const [text, setText] = useState({ movieId: "", comment: "" });
+  const [text, setText] = useState({ movieId: 0, comment: "" });
   const [sendCommentStatus, setSendCommentStatus] = useState(false);
   const [getCommentsStatus, setGetCommentsStatus] = useState(false);
   const dispatch = useDispatch();
@@ -29,14 +59,11 @@ const MovieComments = ({ movieId }) => {
     id: 0,
     status: false,
   });
-  const { addComment, getComment, updateLike, updateDisLike } =
-    CommentManager();
-
-  const getTime = (time) => {
+  const { addComment, getComment } = CommentManager();
+  const getTime = (time: string) => {
     const currentTime = new Date();
     const newTime = new Date(time);
-    const timeElapsed = currentTime - newTime;
-    console.log(timeElapsed);
+    const timeElapsed = currentTime.getTime() - newTime.getTime();
     const seconds = Math.floor(timeElapsed / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
@@ -51,7 +78,6 @@ const MovieComments = ({ movieId }) => {
     if (days > 30 && months > 0) return `${months} months ago`;
     if (months > 12 && years > 0) return `${years} years ago`;
   };
-
   useEffect(() => {
     setGetCommentsStatus(true);
   }, []);
@@ -64,8 +90,8 @@ const MovieComments = ({ movieId }) => {
         setComments(comments);
         setGetCommentsStatus(false);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        // console.log(error);
         setGetCommentsStatus(false);
       });
   }, [getComment, movieId, getCommentsStatus]);
@@ -75,7 +101,7 @@ const MovieComments = ({ movieId }) => {
       return;
 
     addComment(text, storedToken)
-      .then((response) => {
+      .then(() => {
         setGetCommentsStatus(true);
         setSendCommentStatus(false);
       })
@@ -85,26 +111,7 @@ const MovieComments = ({ movieId }) => {
       });
   }, [addComment, sendCommentStatus, text, storedToken]);
 
-  const UpdateLike = (commentId) => {
-    updateLike(commentId, storedToken)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  const UpdateDisLike = (commentId) => {
-    updateDisLike(commentId, storedToken)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: ReactFormEvent) => {
     if (storedToken === undefined) {
       dispatch(setNotificationStatus(true));
     }
@@ -113,12 +120,14 @@ const MovieComments = ({ movieId }) => {
     setSendCommentStatus(true);
 
     const commentJson = {
+      id: 0,
       comment: text.comment,
       dislike: 0,
       email: "",
       name: user?.name,
       like: 0,
       movieId: movieId,
+      date: "",
     };
     if (storedToken !== undefined) {
       setComments((comment) => {
@@ -126,20 +135,7 @@ const MovieComments = ({ movieId }) => {
       });
     }
   };
-
-  // const deleteMessage = (commentId) => {
-  //   deleteComment(commentId, storedToken)
-  //     .then((response) => {
-  //       setGetCommentsStatus(true);
-  //       console.log(response);
-  //     })
-  //     .catch((error) => {
-  //       setGetCommentsStatus(true);
-  //       console.log(error);
-  //     });
-  // };
-
-  const handleOnChange = (e) => {
+  const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText({
       movieId: movieId,
       comment: e.target.value,
@@ -171,7 +167,7 @@ const MovieComments = ({ movieId }) => {
               onClick={() => setTextareaHeight("100px")}
               onFocus={() => setTextareaHeight("100px")}
               onBlur={() => setTextareaHeight("50px")}
-              onInput={(e) => {
+              onInput={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 e.target.style.height = "auto";
                 e.target.style.height = e.target.scrollHeight + "px";
               }}
@@ -183,7 +179,7 @@ const MovieComments = ({ movieId }) => {
           </form>
           {/* comment */}
           <div className="w-full h-auto flex flex-col rounded-lg bg-[#2e4156] shadow-lg py-[4%] px-[4%] gap-[3.75rem] text-gray-300 sm:text-base text-sm">
-            {comments.map((comment, index) => (
+            {comments?.map((comment, index) => (
               <div
                 className="flex flex-row relative w-full h-full gap-4 shadow-lg py-3"
                 key={comment?.id}
@@ -203,10 +199,9 @@ const MovieComments = ({ movieId }) => {
                   />
                   <div className="w-full flex flex-row justify-between items-center">
                     <div className="w-fit h-[50px] flex justify-center flex-col">
-                      <button className="font-bold text-gray-300 text-lg text-blue-400 w-fit">
+                      <button className="font-bold text-gray-300 text-lg w-fit">
                         {comment?.name}
                       </button>
-                      {console.log(comment)}
                       <span>{getTime(comment?.date)}</span>
                     </div>
                     <div className="flex flex-row gap-3 px-3">

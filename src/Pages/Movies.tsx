@@ -6,31 +6,43 @@ import GridLayout from "../Components/GridLayout";
 import GridResize from "../Hooks/gridResize";
 import UpdatePage from "../Components/UpdatePage";
 import RemoveDuplicatesFilter from "../Rawfiles/RemoveDuplicatesFilter";
-
+import ResponseResultType from "../Types/responseResultType";
 import { useEffect, useState } from "react";
 import MovieManager from "../API/MovieManager";
 import { setSubmitFilter } from "../Redux/filterReducer";
 import { setEnd, setStart } from "../Redux/GridSizeIndexReducer";
 const Movies = () => {
-  const { start, end } = useSelector((state) => state.GridSizeIndex);
-  const [discoverMovies, setDiscoverMovies] = useState([]);
+  const { start, end } = useSelector((state: any) => state.GridSizeIndex);
+  const [discoverMovies, setDiscoverMovies] = useState<
+    Array<ResponseResultType>
+  >([]);
   const [showLogin, setShowLoading] = useState(false);
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [pageIndex, showPageIndex] = useState(1);
   const [pageInc, setPageInc] = useState(false);
-  const { filters, submitFilter } = useSelector((state) => state.filters);
+  const { filters, submitFilter } = useSelector((state: any) => state.filters);
   const { getDiscover } = MovieManager();
-  const [filteredDiscoverMovies, setFilteredDiscoverMovies] = useState([]);
+  const [filteredDiscoverMovies, setFilteredDiscoverMovies] = useState<
+    Array<ResponseResultType>
+  >([]);
   const { length } = useSelector((state) => state.GridSize);
-  const filterMovies = (movies) => {
+
+  type responseType = {
+    page: number;
+    results: Array<ResponseResultType>;
+    total_pages: number;
+    total_results: number;
+  };
+  const filterMovies = (movies: Array<ResponseResultType>) => {
     const filtered = movies.filter((movie) => movie.backdrop_path !== null);
     return filtered;
   };
   useEffect(() => {
     dispatch(setSubmitFilter(true));
   }, []);
+
   useEffect(() => {
     if (pageIndex >= totalPages) return;
     showPageIndex(pageIndex + 1);
@@ -46,7 +58,8 @@ const Movies = () => {
   useEffect(() => {
     if (!pageInc) return;
     getDiscover(pageIndex, filters)
-      .then((response) => {
+      .then((response: responseType) => {
+        console.log(response);
         const filteredMovies = filterMovies(response.results);
         setDiscoverMovies((prev) => [...prev, ...filteredMovies]);
         setTotalPages(response?.total_pages);
@@ -68,8 +81,8 @@ const Movies = () => {
         setTotalPages(response?.total_pages);
         dispatch(setSubmitFilter(false));
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        // console.log(error);
         dispatch(setSubmitFilter(false));
       });
   }, [getDiscover, pageIndex, filters, dispatch, submitFilter, length]);

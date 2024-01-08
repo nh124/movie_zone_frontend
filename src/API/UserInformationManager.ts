@@ -1,7 +1,10 @@
 /* eslint-disable no-useless-catch */
 import axios from "axios";
 const UserInformationManager = () => {
-  const get_user = async (token) => {
+  type tokenFormType = {
+    token: string;
+  };
+  const get_user = async (token: string) => {
     try {
       const response = await axios.get(
         import.meta.env.VITE_SERVER_URL + "/getUser",
@@ -18,7 +21,7 @@ const UserInformationManager = () => {
       throw error;
     }
   };
-  const setExpiredToken = async (token, formData) => {
+  const setExpiredToken = async (token: string, formData: tokenFormType) => {
     try {
       const response = await axios.put(
         import.meta.env.VITE_SERVER_URL + "/expiredToken",

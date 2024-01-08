@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import GenreDict from "../API_PARSER/GenreDict";
 
+type filterType = {
+  id: number;
+  name: string;
+  alt_name: string;
+  filter: Array<string>;
+};
 const MovieFilters = () => {
-  const [filterOptions, setFilterOptions] = useState([{}]);
+  const [filterOptions, setFilterOptions] = useState<filterType[]>([]);
   const Genre = GenreDict();
   useEffect(() => {
     const created_filter = [
