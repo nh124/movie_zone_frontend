@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import MovieManager from "../API/MovieManager";
 
-const GetMovieDetails = (movieID, type) => {
+const GetMovieDetails = (movieID: string | undefined, type: string) => {
   const [movieDetails, setMovieDetails] = useState({});
   const { getMovieDetails } = MovieManager();
 
   const getDetails = () => {
-    getMovieDetails(movieID, type)
+    if (movieID === undefined) return;
+    getMovieDetails(parseInt(movieID, 10), type)
       .then((response) => {
         setMovieDetails(response);
       })

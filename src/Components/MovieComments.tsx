@@ -4,11 +4,11 @@ import { IoPersonSharp } from "react-icons/io5";
 import GetUser from "../Hooks/GetUser";
 import UserInformationManager from "../API/UserInformationManager";
 import CommentManager from "../API/CommentManager";
-import EditComment from "./editComment";
+import EditCommentFunc from "./EditComment";
 import DeleteComment from "./DeleteComment";
 import { setNotificationStatus } from "../Redux/NotificationReducer";
 import { useDispatch } from "react-redux";
-import { ReactFormEvent } from "react";
+import { FormEvent } from "react";
 
 const MovieComments = ({ movieId }: { movieId: number }) => {
   const { get_user, setExpiredToken } = UserInformationManager();
@@ -111,7 +111,7 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
       });
   }, [addComment, sendCommentStatus, text, storedToken]);
 
-  const handleSubmit = (event: ReactFormEvent) => {
+  const handleSubmit = (event: FormEvent) => {
     if (storedToken === undefined) {
       dispatch(setNotificationStatus(true));
     }
@@ -130,7 +130,7 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
       date: "",
     };
     if (storedToken !== undefined) {
-      setComments((comment) => {
+      setComments((comment: any) => {
         return [...comment, commentJson];
       });
     }
@@ -189,7 +189,7 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
                 </div>
 
                 <div className="flex flex-col h-auto w-full gap-2 relative">
-                  <EditComment
+                  <EditCommentFunc
                     setGetCommentsStatus={setGetCommentsStatus}
                     storedToken={storedToken}
                     commentId={comment?.id}

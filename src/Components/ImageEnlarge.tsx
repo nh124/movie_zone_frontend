@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import {
   MdOutlineArrowBackIos,
@@ -9,10 +9,15 @@ const ImageEnlarge = ({
   showImages,
   setShowImages,
   setSelectedImageArray,
+}: {
+  SelectedImageArray: any;
+  showImages: boolean;
+  setShowImages: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedImageArray: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const [index, setIndex] = useState(0);
 
-  const onClick = (type) => {
+  const onClick = (type: string) => {
     if (index <= 0 && type === "backward") return;
     if (index >= SelectedImageArray.length - 1 && type === "forward") return;
     if (type === "forward") setIndex(index + 1);

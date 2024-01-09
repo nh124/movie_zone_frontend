@@ -1,7 +1,7 @@
 import { IoMdClose } from "react-icons/io";
 import logo from "../assets/logo.png";
 import Form from "./Form";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import UserManager from "../API/UserSignUp";
 import checkLogo from "../assets/Eo_circle_green_checkmark.svg.png";
 
@@ -10,7 +10,13 @@ const PasswordRecovery = ({
   setPasswordRecovery,
   setShowLoading,
   setSignUpChoice,
+}: {
+  passwordRecovery: boolean;
+  setPasswordRecovery: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setSignUpChoice: React.Dispatch<React.SetStateAction<string>>;
 }) => {
+  type CodeVerificationFormType = { email: ""; verification_code: "" };
   const Steps = [
     { no: 1, step: "Send" },
     { no: 2, step: "Verify" },
@@ -34,7 +40,10 @@ const PasswordRecovery = ({
 
   const [currentStep, setCurrentStep] = useState({ no: 1, step: "Send" });
 
-  const [code, setCode] = useState({ email: "", verification_code: "" });
+  const [code, setCode] = useState<CodeVerificationFormType>({
+    email: "",
+    verification_code: "",
+  });
   const [newPassword, setNewPassword] = useState({
     password: "",
     confirmPassword: "",
@@ -92,7 +101,7 @@ const PasswordRecovery = ({
     if (email === "" || phone === "") return;
     if (submitStatus.phoneSubmitted) {
       reset_password(PhoneEmailVerification)
-        .then((response) => {
+        .then(() => {
           setCurrentStep({ no: 2, step: "Verify" });
           setStatus({
             status: "",
@@ -119,7 +128,7 @@ const PasswordRecovery = ({
     if (email === "" || verification_code === "") return;
     if (submitStatus.verifyCodeSubmitted) {
       verify_code(code)
-        .then((response) => {
+        .then(() => {
           setCurrentStep({ no: 3, step: "Recovery" });
           setStatus({
             status: "",
@@ -149,7 +158,7 @@ const PasswordRecovery = ({
       newPassword.password === newPassword.confirmPassword
     ) {
       update_password(finalPassword)
-        .then((response) => {
+        .then(() => {
           setCurrentStep({ no: 4, step: "Completed" });
           setStatus({
             status: "",
@@ -172,21 +181,32 @@ const PasswordRecovery = ({
     }
   }, [finalPassword, submitStatus, update_password]);
 
-  const onChangePhone = (e) => {
+  const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPhoneEmailVerification((prevForm) => ({
       ...prevForm,
       [name]: value,
     }));
   };
-  const onChangeCode = (e) => {
+  // const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = e.target;
+  //   setCode((prevForm) => ({
+  //     ...prevForm,
+  //     verification_code: value,
+  //   }));
+  // };
+
+  const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setCode((prevForm) => ({
-      ...prevForm,
-      verification_code: value,
-    }));
+    setCode(
+      (prevForm) =>
+        ({
+          ...prevForm,
+          verification_code: value,
+        } as CodeVerificationFormType)
+    );
   };
-  const onChangeNewPassword = (e) => {
+  const onChangeNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewPassword((prevForm) => ({
       ...prevForm,
@@ -198,7 +218,7 @@ const PasswordRecovery = ({
     setPasswordRecovery(false);
     setSignUpChoice("Login");
   };
-  const onSubmitPhone = (event) => {
+  const onSubmitPhone = (event: FormEvent) => {
     // setCurrentStep({ no: 2, step: "Verify" });
     event.preventDefault();
     setSubmitStatus((prevForm) => ({
@@ -206,19 +226,39 @@ const PasswordRecovery = ({
       phoneSubmitted: true,
     }));
   };
-  const onSubmitCode = (event) => {
+  // const onSubmitCode = (event: React.FormEvent) => {
+  //   event.preventDefault();
+  //   setCode((prevForm) => ({
+  //     ...prevForm,
+  //     email: PhoneEmailVerification.email,
+  //   }));
+  //   console.log("code submission before");
+  //   setSubmitStatus((prevForm) => ({
+  //     ...prevForm,
+  //     verifyCodeSubmitted: true,
+  //   }));
+  // };
+  const onSubmitCode = (event: React.FormEvent) => {
     event.preventDefault();
-    setCode((prevForm) => ({
-      ...prevForm,
-      email: PhoneEmailVerification.email,
-    }));
+    // setCode((prevForm) => ({
+    //   ...prevForm,
+    //   email: PhoneEmailVerification.email,
+    // }));
+    setCode(
+      (prevForm) =>
+        ({
+          ...prevForm,
+          email: PhoneEmailVerification.email,
+        } as CodeVerificationFormType)
+    );
+
     console.log("code submission before");
     setSubmitStatus((prevForm) => ({
       ...prevForm,
       verifyCodeSubmitted: true,
     }));
   };
-  const onNewPasswordSubmit = (event) => {
+  const onNewPasswordSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const { password, confirmPassword } = newPassword;
     if (password === confirmPassword) {
@@ -301,6 +341,7 @@ const PasswordRecovery = ({
                   onSubmit={onSubmitPhone}
                   onChange={onChangePhone}
                   formValues={PhoneEmailVerification}
+                  setPasswordRecovery={null}
                 />
               </div>
             )}
@@ -316,6 +357,7 @@ const PasswordRecovery = ({
                   onSubmit={onSubmitCode}
                   onChange={onChangeCode}
                   formValues={PhoneEmailVerification}
+                  setPasswordRecovery={null}
                 />
               </div>
             )}
@@ -330,6 +372,7 @@ const PasswordRecovery = ({
                   onSubmit={onNewPasswordSubmit}
                   onChange={onChangeNewPassword}
                   formValues={PhoneEmailVerification}
+                  setPasswordRecovery={null}
                 />
               </div>
             )}

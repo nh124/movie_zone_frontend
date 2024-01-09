@@ -9,7 +9,11 @@ const CommentManager = () => {
   type editCommentForm = {
     comment: string;
   };
-  const addComment = async (commentForm: commentForm, token: string) => {
+  const addComment = async (
+    commentForm: commentForm,
+    token: string | undefined
+  ) => {
+    if (token === undefined) return;
     try {
       const response = await axios.post(
         import.meta.env.VITE_SERVER_URL + "/addComment",
@@ -103,7 +107,11 @@ const CommentManager = () => {
     }
   };
 
-  const deleteComment = async (commentId: number, token: string) => {
+  const deleteComment = async (
+    commentId: number,
+    token: string | undefined
+  ) => {
+    if (token === undefined) return;
     try {
       const response = await axios.delete(
         import.meta.env.VITE_SERVER_URL + `/deleteComment/${commentId}`,

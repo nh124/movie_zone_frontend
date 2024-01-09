@@ -4,13 +4,22 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setNotificationStatus } from "../Redux/NotificationReducer";
 
-const AddToFavorites = ({ storedToken, movieId }) => {
+const AddToFavorites = ({
+  storedToken,
+  movieId,
+}: {
+  storedToken: string | undefined;
+  movieId: number;
+}) => {
   const [favorites, setFavorites] = useState({
     favorite: "",
     bookmark: "",
   });
   const dispatch = useDispatch();
-  const [userList, setUserList] = useState({});
+  const [userList, setUserList] = useState({
+    email: "",
+    favorites: "",
+  });
   const [favoritesStatus, setFavoritesStatus] = useState(false);
   const [userListStatus, setUserListStatus] = useState(true);
 
@@ -31,10 +40,10 @@ const AddToFavorites = ({ storedToken, movieId }) => {
       .then((response) => {
         setUserList(response?.message);
         setUserListStatus(false);
-        console.log(response);
+        // console.log(response);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        // console.log(error);
         setUserListStatus(false);
       });
   }, [GetUserList, storedToken, userListStatus]);
@@ -102,7 +111,7 @@ const AddToFavorites = ({ storedToken, movieId }) => {
     }
     setFavorites((prev) => ({
       ...prev,
-      favorite: movieId,
+      favorite: movieId.toString(),
     }));
     if (userList?.email === undefined) {
       setFavoritesStatus(true);
@@ -116,7 +125,7 @@ const AddToFavorites = ({ storedToken, movieId }) => {
     }
     setFavorites((prev) => ({
       ...prev,
-      favorite: movieId,
+      favorite: movieId.toString(),
     }));
     setDeteleUserListStatus(true);
   };

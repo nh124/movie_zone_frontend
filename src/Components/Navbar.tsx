@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import logo from "../assets/logo.png";
 import { CiSearch, CiLogout } from "react-icons/ci";
 import { IoCloseOutline, IoPerson } from "react-icons/io5";
@@ -8,17 +8,37 @@ import { useNavigate } from "react-router-dom";
 import GetUser from "../Hooks/GetUser";
 import Search from "./Search";
 
-const Navbar = ({ setShowLoading }) => {
+const Navbar = ({
+  setShowLoading,
+}: {
+  setShowLoading: React.Dispatch<SetStateAction<boolean>>;
+}) => {
   const [showSearch, setShowSearch] = useState(false);
   const [showUserMany, setShowUserMany] = useState(false);
   const { get_user, setExpiredToken } = UserInformationManager();
   const storedTokenObject = localStorage.getItem("token");
-  const storedTokenJson = JSON.parse(storedTokenObject);
-  const storedToken = storedTokenJson?.token;
-  const tokenExpired = storedTokenJson?.expired;
+  type TokenInfo = {
+    storedToken: string | undefined;
+    tokenExpired: boolean | undefined;
+  };
+  const getToken = (): TokenInfo => {
+    if (storedTokenObject === null) {
+      return {
+        storedToken: undefined,
+        tokenExpired: undefined,
+      };
+    }
+    const storedTokenJson = JSON.parse(storedTokenObject);
+    const storedToken = storedTokenJson?.token;
+    const tokenExpired = storedTokenJson?.expired;
+    return { storedToken, tokenExpired };
+  };
+  const { storedToken, tokenExpired } = getToken();
+
   const navigate = useNavigate();
   const user = GetUser(storedToken, get_user, tokenExpired, setExpiredToken);
   const removeToken = () => {
+    if (storedToken === undefined) return;
     const tokenForm = {
       token: storedToken,
     };

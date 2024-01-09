@@ -1,6 +1,6 @@
 import DateConverter from "./DateConverter";
 
-const ParseMovieDetails = (movie, type) => {
+const ParseMovieDetails = (movie: any, type: string): any => {
   const image_base_url = import.meta.env.VITE_IMAGE_BASE_URL;
   const movieParsed = {
     id: movie?.id,
@@ -10,12 +10,12 @@ const ParseMovieDetails = (movie, type) => {
     overView: movie?.overview,
     genres: movie?.genres,
     status: movie?.status,
-    spoken_languages: movie?.spoken_languages?.map((language) => ({
+    spoken_languages: movie?.spoken_languages?.map((language: any) => ({
       id: language.id,
       english_name: language?.english_name,
       name: language?.name,
     })),
-    productionCompanies: movie?.production_companies?.map((company) => ({
+    productionCompanies: movie?.production_companies?.map((company: any) => ({
       id: company.id,
       name: company?.name,
       logoPath: image_base_url + company?.logo_path,
@@ -29,15 +29,15 @@ const ParseMovieDetails = (movie, type) => {
   };
 
   const creditsParsed = {
-    cast: movie?.cast?.map((cast) => ({
+    cast: movie?.cast?.map((cast: any) => ({
       id: cast.id,
       name: cast?.name,
       character: cast?.character,
       profileImage: image_base_url + cast?.profile_path,
     })),
     crew: movie?.crew
-      ?.filter((cast) => cast?.job === "Director")
-      ?.map((cast) => ({
+      ?.filter((cast: any) => cast?.job === "Director")
+      ?.map((cast: any) => ({
         id: cast.id,
         name: cast?.name,
         job: cast?.job,
@@ -47,24 +47,24 @@ const ParseMovieDetails = (movie, type) => {
 
   const videosParsed = {
     video: movie?.results
-      ?.filter((video) => video?.type === "Trailer")
-      ?.map((video) => ({ key: video.key })),
+      ?.filter((video: any) => video?.type === "Trailer")
+      ?.map((video: any) => ({ key: video.key })),
   };
 
   const imagesParsed = {
-    backdrops: movie?.backdrops?.map((backdrop) => ({
+    backdrops: movie?.backdrops?.map((backdrop: any) => ({
       aspect_ratio: backdrop?.aspect_ratio,
       height: backdrop?.height,
       file_path: image_base_url + backdrop?.file_path,
       width: backdrop?.width,
     })),
-    logos: movie?.logos?.map((logo) => ({
+    logos: movie?.logos?.map((logo: any) => ({
       aspect_ratio: logo?.aspect_ratio,
       height: logo?.height,
       file_path: image_base_url + logo?.file_path,
       width: logo?.width,
     })),
-    posters: movie?.posters?.map((poster) => ({
+    posters: movie?.posters?.map((poster: any) => ({
       aspect_ratio: poster?.aspect_ratio,
       height: poster?.height,
       file_path: image_base_url + poster?.file_path,
@@ -79,4 +79,3 @@ const ParseMovieDetails = (movie, type) => {
 };
 
 export default ParseMovieDetails;
-// ?.filter((cast) => cast?.known_for_department === "Directing")

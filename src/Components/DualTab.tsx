@@ -1,20 +1,30 @@
 import DuoButtonDictionary from "../Rawfiles/DuoButtonDictionary";
 
+type StatusType = {
+  status: string;
+  message: string;
+};
 const DualTab = ({
   setTab,
   currentValue,
   DuoTabType,
   setStatus,
   setDefault,
+}: {
+  setTab: React.Dispatch<React.SetStateAction<string>>;
+  currentValue: string;
+  DuoTabType: string;
+  setStatus: React.Dispatch<React.SetStateAction<StatusType>>;
+  setDefault: Function;
 }) => {
   const tabDictionary = DuoButtonDictionary();
 
   const currentDuoTab =
     DuoTabType === "signUp" ? tabDictionary.signUp : tabDictionary.userChoices;
 
-  const onClick = (e) => {
-    setDefault("switch");
-    setTab(e.target.name);
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setDefault();
+    setTab(e.currentTarget.name);
     setStatus({
       status: "",
       message: "",

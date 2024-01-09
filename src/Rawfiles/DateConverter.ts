@@ -1,5 +1,4 @@
-const DateConverter = (date: string) => {
-  // console.log(date);
+const DateConverter = (date: string | undefined) => {
   if (date === undefined) return;
   function formatDate(inputDate: string) {
     const months = [

@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-const Search = ({ showSearch }) => {
+const Search = ({ showSearch }: { showSearch: boolean }) => {
   const [search, setSearch] = useState("");
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 

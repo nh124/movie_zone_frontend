@@ -4,7 +4,7 @@ import MovieManagerHook from "../Hooks/MovieManagerHook";
 import { useNavigate } from "react-router-dom";
 
 const MovieTab = () => {
-  const { currentList } = useSelector((state) => state.MovieStatusTab);
+  const { currentList } = useSelector((state: any) => state.MovieStatusTab);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (

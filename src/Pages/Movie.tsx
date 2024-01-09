@@ -22,14 +22,28 @@ import MoreDetailsCard from "../Components/MoreDetailsCard";
 import ImageEnlarge from "../Components/ImageEnlarge";
 const Movie = () => {
   const { movieId } = useParams();
-  const query_videos = GetMovieDetails(movieId, "videos");
-  const query_socials = GetMovieDetails(movieId, "socials");
+  type VideoType = {
+    video: {
+      key: string;
+    }[];
+  };
+  const getMovieID = (movieId: string | undefined) => {
+    if (movieId === undefined) return 0;
+    const movieIDInt = parseInt(movieId, 10);
+    return movieIDInt;
+  };
+  const movie_id = getMovieID(movieId);
+  const query_videos = GetMovieDetails(movie_id.toString(), "videos");
+  const query_socials = GetMovieDetails(movie_id.toString(), "socials");
+
   const [playTrailers, setPlayTrailers] = useState(false);
   const [showLogin, setShowLoading] = useState(false);
-  const [video, setVideo] = useState([]);
-  const [socials, setSocials] = useState([]);
-  const { length } = useSelector((state) => state.GridSize);
-  const { notificationStatus } = useSelector((state) => state.Notification);
+  const [video, setVideo] = useState<VideoType>({ video: [] });
+  const [socials, setSocials] = useState({});
+  const { length } = useSelector((state: any) => state.GridSize);
+  const { notificationStatus } = useSelector(
+    (state: any) => state.Notification
+  );
   const dispatch = useDispatch();
   const [selectedPersonID, setSelectedPersonID] = useState("");
   const [showPeopleDetails, setShowPeopleDetails] = useState(false);
@@ -51,6 +65,7 @@ const Movie = () => {
 
   useEffect(() => {
     const parsedVideo = ParseMovieDetails(query_videos, "videos");
+    console.log(video);
     setVideo(parsedVideo);
     setSocials(query_socials);
     dispatch(setTab("Trending"));
@@ -112,7 +127,7 @@ const Movie = () => {
         <VideoPlayers />
         <MoreDetailsCard
           type="Person"
-          personID={selectedPersonID}
+          personID={parseInt(selectedPersonID, 10)}
           imageURL={selectedImageURL}
           showPeopleDetails={showPeopleDetails}
           setShowPeopleDetails={setShowPeopleDetails}
@@ -120,7 +135,7 @@ const Movie = () => {
           setSelectedImageURL={setSelectedImageURL}
         />
         <UserLogin showLogin={showLogin} setShowLoading={setShowLoading} />
-        <SplashScreen movieId={movieId} setPlayTrailers={setPlayTrailers} />
+        <SplashScreen movieId={movie_id} setPlayTrailers={setPlayTrailers} />
         <MovieDetails
           movieId={movieId}
           socials={socials}
@@ -129,7 +144,7 @@ const Movie = () => {
           setShowPeopleDetails={setShowPeopleDetails}
           setSelectedImageArray={setSelectedImageArray}
         />
-        <MovieComments movieId={movieId} />
+        <MovieComments movieId={movie_id} />
       </PageLayout>
     </div>
   );

@@ -1,7 +1,14 @@
 import ScoreCircle from "./ScoreCircle";
 import { useNavigate } from "react-router-dom";
 
-const Poster = ({ movie }) => {
+type movieType = {
+  vote_average: number;
+  id: number;
+  poster_image_url: string;
+  title: string;
+  ratingAvg: number;
+};
+const Poster = ({ movie }: { movie: movieType }) => {
   const ratingAvg = Math.round(movie?.vote_average);
   const navigate = useNavigate();
   return (

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import UserManager from "../API/UserSignUp";
 
-const VerifyCode = (CodeVerificationForm) => {
+type CodeVerificationFormType = { email: ""; verification_code: "" };
+const VerifyCode = (CodeVerificationForm: CodeVerificationFormType) => {
   const [status, setStatus] = useState({});
 
   const { verify_code } = UserManager();

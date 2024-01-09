@@ -20,9 +20,9 @@ type responseType = {
 };
 type GetDataType = (token: string) => Promise<responseType>;
 const GetUser = (
-  storedToken: string,
+  storedToken: string | undefined,
   getData: GetDataType,
-  tokenExpired: boolean,
+  tokenExpired: boolean | undefined,
   setExpiredToken: SetExpiredTokenFunction
 ) => {
   const [token, setToken] = useState("");
@@ -35,6 +35,7 @@ const GetUser = (
   });
   const navigate = useNavigate();
   const removeToken = () => {
+    if (storedToken === undefined) return;
     const tokenForm = {
       token: storedToken,
     };

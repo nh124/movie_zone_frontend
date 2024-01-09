@@ -10,7 +10,13 @@ const PhoneVerification = ({
   setPhoneVerification,
   setShowLoading,
   setSignUpChoice,
+}: {
+  phoneVerification: boolean;
+  setPhoneVerification: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setSignUpChoice: React.Dispatch<React.SetStateAction<string>>;
 }) => {
+  type CodeVerificationFormType = { email: ""; verification_code: "" };
   const Steps = [
     { no: 1, step: "Send" },
     { no: 2, step: "Verify" },
@@ -33,7 +39,10 @@ const PhoneVerification = ({
 
   const [currentStep, setCurrentStep] = useState({ no: 1, step: "Send" });
 
-  const [code, setCode] = useState({ email: "", verification_code: "" });
+  const [code, setCode] = useState<CodeVerificationFormType>({
+    email: "",
+    verification_code: "",
+  });
   const [newPassword, setNewPassword] = useState({
     password: "",
     confirmPassword: "",
@@ -83,7 +92,7 @@ const PhoneVerification = ({
     if (email === "" || phone === "") return;
     if (submitStatus.phoneSubmitted) {
       reset_password(PhoneEmailVerification)
-        .then((response) => {
+        .then(() => {
           setCurrentStep({ no: 2, step: "Verify" });
           setStatus({
             status: "",
@@ -110,7 +119,7 @@ const PhoneVerification = ({
     if (email === "" || verification_code === "") return;
     if (submitStatus.verifyCodeSubmitted) {
       verify_code(code)
-        .then((response) => {
+        .then(() => {
           setCurrentStep({ no: 4, step: "Completed" });
           setStatus({
             status: "",
@@ -132,26 +141,37 @@ const PhoneVerification = ({
     }
   }, [code, submitStatus, verify_code]);
 
-  const onChangePhone = (e) => {
+  const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPhoneEmailVerification((prevForm) => ({
       ...prevForm,
       [name]: value,
     }));
   };
-  const onChangeCode = (e) => {
+  // const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = e.target;
+  //   setCode((prevForm: CodeVerificationFormType) => ({
+  //     ...prevForm,
+  //     verification_code: value,
+  //   }));
+  // };
+
+  const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setCode((prevForm) => ({
-      ...prevForm,
-      verification_code: value,
-    }));
+    setCode(
+      (prevForm) =>
+        ({
+          ...prevForm,
+          verification_code: value,
+        } as CodeVerificationFormType)
+    );
   };
 
   const passwordRecoveryComplete = () => {
     setPhoneVerification(false);
     setSignUpChoice("Login");
   };
-  const onSubmitPhone = (event) => {
+  const onSubmitPhone = (event: React.FormEvent) => {
     // setCurrentStep({ no: 2, step: "Verify" });
     event.preventDefault();
     setSubmitStatus((prevForm) => ({
@@ -159,12 +179,20 @@ const PhoneVerification = ({
       phoneSubmitted: true,
     }));
   };
-  const onSubmitCode = (event) => {
+  const onSubmitCode = (event: React.FormEvent) => {
     event.preventDefault();
-    setCode((prevForm) => ({
-      ...prevForm,
-      email: PhoneEmailVerification.email,
-    }));
+    // setCode((prevForm) => ({
+    //   ...prevForm,
+    //   email: PhoneEmailVerification.email,
+    // }));
+    setCode(
+      (prevForm) =>
+        ({
+          ...prevForm,
+          email: PhoneEmailVerification.email,
+        } as CodeVerificationFormType)
+    );
+
     console.log("code submission before");
     setSubmitStatus((prevForm) => ({
       ...prevForm,
@@ -240,6 +268,7 @@ const PhoneVerification = ({
                   onSubmit={onSubmitPhone}
                   onChange={onChangePhone}
                   formValues={PhoneEmailVerification}
+                  setPasswordRecovery={null}
                 />
               </div>
             )}
@@ -255,6 +284,7 @@ const PhoneVerification = ({
                   onSubmit={onSubmitCode}
                   onChange={onChangeCode}
                   formValues={PhoneEmailVerification}
+                  setPasswordRecovery={null}
                 />
               </div>
             )}

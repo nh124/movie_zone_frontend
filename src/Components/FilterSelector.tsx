@@ -4,6 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFilter } from "../Redux/filterReducer";
 import GenreDict from "../API_PARSER/GenreDict";
 
+type expandDropDown = {
+  name: string;
+  status: boolean;
+};
 const FilterSelector = ({
   expandDropDown,
   setExpandDropDown,
@@ -11,14 +15,20 @@ const FilterSelector = ({
   name,
   alt_name,
   order,
+}: {
+  expandDropDown: expandDropDown;
+  setExpandDropDown: React.Dispatch<React.SetStateAction<expandDropDown>>;
+  filterOption: any;
+  name: string;
+  alt_name: string;
+  order: string;
 }) => {
-  const Genre = GenreDict();
+  const Genre = GenreDict() as Record<string, string>;
   const filterSize = (filterOption?.length * 100) / 2;
   const dispatch = useDispatch();
   const genreDict = GenreDict();
-  const { filters } = useSelector((state) => state.filters);
-  const AddFilter = (addedFiler, selectFilter) => {
-    // console.log(addedFiler, selectFilter);
+  const { filters } = useSelector((state: any) => state.filters);
+  const AddFilter = (addedFiler: any) => {
     if (alt_name === "genre") {
       const value = Object.keys(Genre).find((key) => Genre[key] === addedFiler);
       dispatch(
@@ -78,7 +88,7 @@ const FilterSelector = ({
             transition: "height 0.3s ease",
           }}
         >
-          {filterOption?.map((filter, index) => {
+          {filterOption?.map((filter: any, index: number) => {
             const selectedFilter =
               alt_name === "vote_average"
                 ? filters[alt_name]
@@ -86,7 +96,7 @@ const FilterSelector = ({
 
             return (
               <button
-                onClick={() => AddFilter(filter, selectedFilter)}
+                onClick={() => AddFilter(filter)}
                 key={index}
                 className="hover:bg-slate-800 duration-300 w-full px-3 h-[50px] py-3  relative rounded-md group flex flex-row justify-between shadow-md"
               >

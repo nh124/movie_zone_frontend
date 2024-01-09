@@ -1,44 +1,47 @@
-import { FaBookmark, FaHeart, FaThumbsDown, FaThumbsUp } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import UserListManager from "../API/UserListManager";
 import { useEffect, useState } from "react";
-import UserInformationManager from "../API/UserInformationManager";
-import GetUser from "../Hooks/GetUser";
-import GetMovieDetails from "../API_PARSER/GetMovieDetails";
 import MovieManager from "../API/MovieManager";
-import { IoMdClose } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
 import { IoIosStar } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import { MdAutoGraph } from "react-icons/md";
-const SidePanelHome = ({ collectionTab, setCollectionTab }) => {
-  const { get_user, setExpiredToken } = UserInformationManager();
+const SidePanelHome = () => {
   const storedTokenObject = localStorage.getItem("token");
-  const storedTokenJson = JSON.parse(storedTokenObject);
-  const storedToken = storedTokenJson?.token;
-  const tokenExpired = storedTokenJson?.expired;
-  const user = GetUser(storedToken, get_user, tokenExpired, setExpiredToken);
+  type TokenInfo = {
+    storedToken: string | undefined;
+    tokenExpired: boolean | undefined;
+  };
+  type movieType = {
+    id: number;
+    title: string;
+    vote_average: number;
+    vote_count: number;
+    backdrop_path: string;
+  };
+  const getToken = (): TokenInfo => {
+    if (storedTokenObject === null) {
+      return {
+        storedToken: undefined,
+        tokenExpired: undefined,
+      };
+    }
+    const storedTokenJson = JSON.parse(storedTokenObject);
+    const storedToken = storedTokenJson?.token;
+    const tokenExpired = storedTokenJson?.expired;
+    return { storedToken, tokenExpired };
+  };
+  const { storedToken } = getToken();
+
   const [moviesIds, setMoviesIds] = useState([]);
   const { getUserLists } = UserListManager();
   const [getUserListsStatus, setGetUserLists] = useState(true);
   const [convertToJson, setConvertToJson] = useState(false);
-  const [favoriteMovies, setFavoriteMovies] = useState([]);
+  const [favoriteMovies, setFavoriteMovies] = useState<movieType[]>([]);
 
   const { getMovieDetails } = MovieManager();
 
-  //   useEffect(() => {
-  //     if (!convertToJson) return;
-  //     for (const elements of moviesIds) {
-  //       getMovieDetails(elements, "details")
-  //         .then((responce) => {
-  //           setFavoriteMovies((prev) => [...prev, responce]);
-  //           setConvertToJson(false);
-  //         })
-  //         .catch((err) => {
-  //           console.log(err);
-  //         });
-  //     }
-  //   }, [getMovieDetails, convertToJson, moviesIds]);
   const navigate = useNavigate();
-  const calculateScoreAverage = (voting_average) => {
+  const calculateScoreAverage = (voting_average: number) => {
     const ratingAvg = Math.round(voting_average);
     return `${ratingAvg * 10}%`;
   };
@@ -70,11 +73,11 @@ const SidePanelHome = ({ collectionTab, setCollectionTab }) => {
   }, [getMovieDetails, convertToJson, moviesIds]);
 
   useEffect(() => {
-    if (storedToken === null) return;
+    if (storedToken === undefined) return;
     if (!getUserListsStatus) return;
     getUserLists(storedToken)
-      .then((responce) => {
-        const { favorites } = responce.message;
+      .then((response: any) => {
+        const { favorites } = response.message;
         const favoritesArray = favorites.split(",");
         setMoviesIds(favoritesArray);
         setGetUserLists(false);
@@ -95,7 +98,6 @@ const SidePanelHome = ({ collectionTab, setCollectionTab }) => {
           <div className="absolute w-[70%] h-[4px] sm:w-[4px] sm:h-[60%] sm:top-1/2 transform sm:-translate-y-1/2 -translate-x-1/2 left-1/2 sm:translate-x-0 sm:-left-4 rounded-lg bg-slate-500 -top-4"></div>
           <div className="w-full h-[60px] flex flex-row font-bold relative">
             <button
-              onClick={() => setCollectionTab("Favorites")}
               className={`w-full relative h-full z-10 text-gray-400 text-xl border border-gray-400`}
             >
               Favorites
@@ -127,7 +129,7 @@ const SidePanelHome = ({ collectionTab, setCollectionTab }) => {
             </div>
           ) : (
             <div className="w-full h-full flex flex-col px-3 py-6 text-gray-300 gap-4 overflow-y-auto">
-              {favoriteMovies.map((movie, index) => (
+              {favoriteMovies.map((movie: movieType) => (
                 <button
                   className="w-full h-[100px] p-2 flex flex-row relative bg-slate-800 shadow-xl rounded-lg hover:scale-[100%] scale-95 duration-300"
                   key={movie?.id}

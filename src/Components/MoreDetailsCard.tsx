@@ -1,39 +1,89 @@
 import { useEffect, useRef, useState } from "react";
-import GetMovieDetails from "../API_PARSER/GetMovieDetails";
 import MovieManager from "../API/MovieManager";
 import DateConverter from "../Rawfiles/DateConverter";
 import { IoMdClose } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
 const MoreDetailsCard = ({
   type,
-  personID,
   imageURL,
+  personID,
   setShowPeopleDetails,
   showPeopleDetails,
   setSelectedPersonID,
   setSelectedImageURL,
+}: {
+  type: string;
+  imageURL: string;
+  personID: number;
+  setShowPeopleDetails: React.Dispatch<React.SetStateAction<boolean>>;
+  showPeopleDetails: boolean;
+  setSelectedPersonID: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedImageURL: React.Dispatch<React.SetStateAction<string>>;
 }) => {
+  type creditContributionType = {
+    adult: boolean;
+    backdrop_path: string;
+    character: string;
+    credit_id: string;
+    genre_ids: Array<number>;
+    id: number;
+    order: number;
+    original_language: string;
+    original_title: string;
+    overview: string;
+    popularity: number;
+    poster_path: string;
+    release_date: string;
+    video: false;
+    vote_average: number;
+    vote_count: number;
+  };
+
+  type PeopleDetailsType = {
+    adult: boolean;
+    also_known_as: Array<string>;
+    biography: string;
+    birthday: string;
+    gender: number;
+    homepage: string;
+    id: number;
+    imdb_id: string;
+    known_for_department: string;
+    name: string;
+    place_of_birth: string;
+    popularity: number;
+    profile_path: string;
+  };
+  type responseType = {
+    cast: Array<creditContributionType>;
+    crew: Array<creditContributionType>;
+  };
+
+  console.log(type, imageURL);
   const { getPeopleDetails } = MovieManager();
-  const [personDetails, setPersonDetails] = useState({});
-  const [peopleCredit, setPeopleCredit] = useState([]);
+  const [personDetails, setPersonDetails] = useState<PeopleDetailsType | null>(
+    null
+  );
+  const [peopleCredit, setPeopleCredit] = useState<
+    Array<creditContributionType>
+  >([]);
   const [getPersonDetailsStatus, setPersonDetailsStatus] = useState(true);
-  const imageBaseURL = "https://image.tmdb.org/t/p/original";
+  const imageBaseURL = import.meta.env.VITE_IMAGE_BASE_URL;
   const [expandBio, setExpandBio] = useState(false);
-  const biographyRef = useRef(null);
-  const navigate = useNavigate();
+  const biographyRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (biographyRef.current) {
       biographyRef.current.scrollTop = 0;
     }
   }, [expandBio]);
 
-  const sortCreditBasedOnScore = (credits) => {
+  const sortCreditBasedOnScore = (credits: Array<creditContributionType>) => {
     const sortedCredit = [...credits].sort(
       (a, b) => b.popularity - a.popularity
     );
     const top5Movies = sortedCredit.slice(0, 10);
     return top5Movies;
   };
+
   useEffect(() => {
     if (!getPersonDetailsStatus) return;
     if (!personID) return;
@@ -52,10 +102,10 @@ const MoreDetailsCard = ({
     if (!getPersonDetailsStatus) return;
     if (!personID) return;
     getPeopleDetails("credit", personID)
-      .then((response) => {
-        console.log(response);
+      .then((response: responseType) => {
+        // console.log(response);
         const topCredits = sortCreditBasedOnScore(response?.cast);
-        console.log(topCredits);
+        // console.log(topCredits);
         setPeopleCredit(topCredits);
         setPersonDetailsStatus(false);
       })
@@ -119,7 +169,7 @@ const MoreDetailsCard = ({
                 </span>
               </div>
               <div className="w-full  px-4 text-gray-400 font-bold pt-3 pb-0">
-                <span>Biogrophy</span>
+                <span>Biography</span>
               </div>
               <div
                 style={{

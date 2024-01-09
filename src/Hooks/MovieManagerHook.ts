@@ -1,19 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { setCurrentTab } from "../Redux/MovieStatusTabReducer";
 import { setStart, setEnd } from "../Redux/GridSizeIndexReducer";
 import getTopRatedMovies from "../API_PARSER/GetTopRatedMovies";
 import GetUpcomingMovies from "../API_PARSER/GetUpcomingMovies";
 import RemoveDuplicatesFilter from "../Rawfiles/RemoveDuplicatesFilter";
-// import GetDiscover from "../API_PARSER/GetDiscover";
+import { Dispatch } from "redux";
 
-const MovieManagerHook = ({ dispatch, currentList }) => {
-  const { submitFilter } = useSelector((state) => state.filters);
+const MovieManagerHook = ({
+  dispatch,
+  currentList,
+}: {
+  dispatch: Dispatch;
+  currentList: string;
+}) => {
+  const { submitFilter } = useSelector((state: any) => state.filters);
   const getTopMovies = getTopRatedMovies();
   const getUpcomingMovies = GetUpcomingMovies();
-  // const discoverMovies = GetDiscover();
-  const { length } = useSelector((state) => state.GridSize);
-  const { DiscoveryMoviePageIndex } = useSelector((state) => state.MovieIndex);
+  const { length } = useSelector((state: any) => state.GridSize);
+  const { DiscoveryMoviePageIndex } = useSelector(
+    (state: any) => state.MovieIndex
+  );
   const { TrendingMoviePageIndex, UpcomingMoviePageIndex } = useSelector(
     (state: any) => state.MovieIndex
   );

@@ -79,7 +79,11 @@ const MovieManager = () => {
     }
   };
 
-  const searchMovie = async (searchMovieIndex: number, search: string) => {
+  const searchMovie = async (
+    searchMovieIndex: number,
+    search: string | undefined
+  ) => {
+    if (search === undefined) return;
     const queryParams = {
       language: "en-US",
       page: searchMovieIndex.toString(),

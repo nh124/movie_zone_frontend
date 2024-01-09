@@ -1,7 +1,30 @@
 /* eslint-disable no-useless-catch */
 import axios from "axios";
 const UserManager = () => {
-  const register_user = async (registerFormData) => {
+  type registerFormType = {
+    Name: string;
+    Email: string;
+    Phone: string;
+    Password: string;
+  };
+  type loginFormType = {
+    Email: string;
+    Password: string;
+  };
+
+  type PhoneEmailVerificationFormType = {
+    email: string;
+    phone: string;
+  };
+
+  type finalPasswordType = {
+    email: string;
+    password: string;
+  };
+
+  type CodeVerificationFormType = { email: ""; verification_code: "" };
+
+  const register_user = async (registerFormData: registerFormType) => {
     try {
       const response = await axios.post(
         import.meta.env.VITE_SERVER_URL + "/register",
@@ -19,7 +42,7 @@ const UserManager = () => {
     }
   };
 
-  const login_user = async (loginFormData) => {
+  const login_user = async (loginFormData: loginFormType) => {
     try {
       const response = await axios.post(
         import.meta.env.VITE_SERVER_URL + "/login",
@@ -37,7 +60,9 @@ const UserManager = () => {
     }
   };
 
-  const reset_password = async (PhoneEmailVerificationForm) => {
+  const reset_password = async (
+    PhoneEmailVerificationForm: PhoneEmailVerificationFormType
+  ) => {
     try {
       const response = await axios.post(
         import.meta.env.VITE_SERVER_URL + "/resetPassword",
@@ -55,7 +80,9 @@ const UserManager = () => {
     }
   };
 
-  const verify_code = async (CodeVerificationForm) => {
+  const verify_code = async (
+    CodeVerificationForm: CodeVerificationFormType
+  ) => {
     try {
       const response = await axios.post(
         import.meta.env.VITE_SERVER_URL + "/verifyCode",
@@ -72,7 +99,7 @@ const UserManager = () => {
       throw error;
     }
   };
-  const update_password = async (updatedPasswordForm) => {
+  const update_password = async (updatedPasswordForm: finalPasswordType) => {
     try {
       const response = await axios.put(
         import.meta.env.VITE_SERVER_URL + "/updateUserPassword",

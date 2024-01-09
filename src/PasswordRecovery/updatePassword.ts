@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import UserManager from "../API/UserSignUp";
+type finalPasswordType = {
+  email: string;
+  password: string;
+};
 
-const UpdatePassword = (updatedPasswordForm) => {
+const UpdatePassword = (updatedPasswordForm: finalPasswordType) => {
   const [status, setStatus] = useState({});
 
   const { update_password } = UserManager();

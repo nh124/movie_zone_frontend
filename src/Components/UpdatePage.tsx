@@ -7,15 +7,14 @@ import { setStart, setEnd } from "../Redux/GridSizeIndexReducer";
 import {
   IncrementTrendingMoviePageIndex,
   IncrementUpcomingMoviePageIndex,
-  IncrementDiscoveryMoviePageIndex,
 } from "../Redux/MovieIndexReducer";
 
 const UpdatePage = ({ currentPage }: { currentPage: string }) => {
-  const { start, end } = useSelector((state) => state.GridSizeIndex);
+  const { start, end } = useSelector((state: any) => state.GridSizeIndex);
   const { currentList, currentTab } = useSelector(
-    (state) => state.MovieStatusTab
+    (state: any) => state.MovieStatusTab
   );
-  const { length } = useSelector((state) => state.GridSize);
+  const { length } = useSelector((state: any) => state.GridSize);
   const dispatch = useDispatch();
   const setPage = (forward: boolean) => {
     if (currentPage === "") return;

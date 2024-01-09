@@ -4,13 +4,19 @@ const Gallery = ({
   images,
   imageTypes,
   setSelectedImageArray,
+}: {
+  imageType: string;
+  setImageType: React.Dispatch<React.SetStateAction<string>>;
+  imageTypes: string[];
+  images: any;
+  setSelectedImageArray: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   return (
     <div className="w-full h-[300px] bg-gradient-to-t from-[#283747] shadow-lg rounded-lg px-3 py-3 flex flex-col">
       <div className=" text-gray-300 font-semibold flex justify-between items-center">
         <span>Gallery</span>
         <div className="flex flex-row gap-3 items-center text-gray-400 text-sm">
-          {imageTypes.map((type) => (
+          {imageTypes.map((type: any) => (
             <button
               key={type.id}
               onClick={() => setImageType(type)}
@@ -25,7 +31,7 @@ const Gallery = ({
       </div>
       <div className="w-full h-full px-3 py-3 flex flex-row gap-3 overflow-y-auto">
         {imageType === "Backdrops" &&
-          images?.backdrops?.map((image) => (
+          images?.backdrops?.map((image: any) => (
             <button
               onClick={() => setSelectedImageArray(images?.backdrops)}
               className="flex-shrink-0 w-[300px] h-full overflow-hidden rounded-md shadow-lg hover:scale-105 duration-300"
@@ -39,7 +45,7 @@ const Gallery = ({
             </button>
           ))}
         {imageType === "Posters" &&
-          images?.posters?.map((image) => (
+          images?.posters?.map((image: any) => (
             <button
               onClick={() => setSelectedImageArray(images?.posters)}
               className="flex-shrink-0 w-[300px] h-full overflow-hidden rounded-md shadow-lg hover:scale-105 duration-300"

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import formDictionary from "../Rawfiles/Forms";
-
+type status = {
+  status: string;
+  message: string;
+};
 const Form = ({
   formType,
   onSubmit,
@@ -8,6 +11,13 @@ const Form = ({
   formValues,
   setPasswordRecovery,
   submitStatus,
+}: {
+  formType: string;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  formValues: any;
+  setPasswordRecovery: null | React.Dispatch<React.SetStateAction<boolean>>;
+  submitStatus: status | undefined;
 }) => {
   const {
     registration,
@@ -44,6 +54,8 @@ const Form = ({
       setStatus(submitStatus);
     }
   }, [submitStatus]);
+
+  if (currentForm === undefined) return;
 
   return (
     <div className="w-full h-full flex items-center flex-col">
@@ -82,16 +94,18 @@ const Form = ({
           />
         </div>
       </form>
-      <div>
-        {formType === "Login" && (
-          <button
-            className="text-[#0077F6] font-bold hover:underline w-full"
-            onClick={() => setPasswordRecovery(true)}
-          >
-            Forgot password
-          </button>
-        )}
-      </div>
+      {setPasswordRecovery !== null && (
+        <div>
+          {formType === "Login" && (
+            <button
+              className="text-[#0077F6] font-bold hover:underline w-full"
+              onClick={() => setPasswordRecovery(true)}
+            >
+              Forgot password
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

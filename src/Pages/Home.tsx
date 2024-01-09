@@ -6,11 +6,11 @@ import MovieTab from "../Components/MovieTab";
 import UpdatePage from "../Components/UpdatePage";
 import GridLayout from "../Components/GridLayout";
 import UserLogin from "../Components/UserLogin";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SidePanelHome from "../Components/SidePanelHome";
 const Home = () => {
-  const { currentTab } = useSelector((state) => state.MovieStatusTab);
-  const { start, end } = useSelector((state) => state.GridSizeIndex);
+  const { currentTab } = useSelector((state: any) => state.MovieStatusTab);
+  const { start, end } = useSelector((state: any) => state.GridSizeIndex);
   const [showLogin, setShowLoading] = useState(false);
 
   return (

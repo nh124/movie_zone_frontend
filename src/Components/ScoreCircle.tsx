@@ -11,10 +11,12 @@ const ScoreCircle = ({
     Poster: "text-green-400",
     movie_display: "text-blue-200",
   };
+  const color =
+    ScoreCircleColorSelector[type as keyof typeof ScoreCircleColorSelector];
   return (
     <div className="w-fit h-full flex justify-start items-center relative">
       <svg
-        className={`h-full w-full ${ScoreCircleColorSelector[type]}`}
+        className={`h-full w-full ${color}`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -44,7 +46,7 @@ const ScoreCircle = ({
       <span
         className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
         ${type === "movie_display" ? "text-lg" : "text-xs"}
-        ${ScoreCircleColorSelector[type]}
+        ${color}
         `}
       >
         {percentage}%

@@ -2,7 +2,10 @@ import { PropsWithChildren } from "react";
 import Navbar from "./Navbar";
 
 export const PageLayout = (
-  props: PropsWithChildren<{ showLogin: boolean; setShowLoading }>
+  props: PropsWithChildren<{
+    showLogin: boolean;
+    setShowLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  }>
 ) => {
   const { showLogin, setShowLoading } = props;
   return (

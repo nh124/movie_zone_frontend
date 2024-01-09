@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import CommentManager from "../API/CommentManager";
 
 type updateCommentStatus = {
@@ -33,14 +33,14 @@ const EditComment = ({
   const [updatedComment, setUpdatedComment] = useState({
     comment: "",
   });
-  const onChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUpdatedComment({
       comment: e.target.value,
     });
     console.log(e.target.value);
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     if (storedToken === undefined) return;
     if (
       updatedComment.comment === undefined ||

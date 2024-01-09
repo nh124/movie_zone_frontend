@@ -1,7 +1,15 @@
 import { MdDeleteOutline } from "react-icons/md";
 import CommentManager from "../API/CommentManager";
 
-const DeleteComment = ({ commentId, storedToken, setGetCommentsStatus }) => {
+const DeleteComment = ({
+  commentId,
+  storedToken,
+  setGetCommentsStatus,
+}: {
+  commentId: number;
+  storedToken: string | undefined;
+  setGetCommentsStatus: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { deleteComment } = CommentManager();
 
   const onClick = () => {

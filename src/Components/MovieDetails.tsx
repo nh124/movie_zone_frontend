@@ -12,10 +12,40 @@ const MovieDetails = ({
   setSelectedPersonID,
   setShowPeopleDetails,
   setSelectedImageArray,
+}: {
+  movieId: string | undefined;
+  socials: any;
+  setSelectedImageURL: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedPersonID: React.Dispatch<React.SetStateAction<string>>;
+  setShowPeopleDetails: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedImageArray: any;
 }) => {
   const [expandReadMore, setExpandReadMore] = useState(true);
-  const [details, setDetails] = useState({});
-  const [credits, setCredits] = useState({});
+  const [details, setDetails] = useState({
+    originalTitle: "",
+    title: "",
+    overView: "",
+    homePage: "",
+    revenue: "",
+    status: "",
+    spoken_languages: [
+      {
+        id: 0,
+        english_name: "",
+        name: "",
+      },
+    ],
+  });
+  const [credits, setCredits] = useState({
+    cast: [
+      {
+        id: 0,
+        profileImage: "",
+        name: "",
+        character: "",
+      },
+    ],
+  });
   const query_details = GetMovieDetails(movieId, "details");
   const query_credits = GetMovieDetails(movieId, "credits");
   const query_images = GetMovieDetails(movieId, "images");
@@ -31,7 +61,7 @@ const MovieDetails = ({
     setImages(parsedImages);
   }, [query_details, query_credits, query_images]);
 
-  const setPersonDetails = (imageURL, personID) => {
+  const setPersonDetails = (imageURL: string, personID: string) => {
     setSelectedImageURL(imageURL);
     setSelectedPersonID(personID);
     setShowPeopleDetails(true);
@@ -69,6 +99,7 @@ const MovieDetails = ({
             </div>
           </div>
         </div>
+
         <div className="flex  text-gray-300">
           <div className="w-full h-auto px-3 py-3 bg-gradient-to-t from-[#2e4156] rounded-lg shadow-lg flex flex-col gap-3">
             <span className="font-semibold">Top Cast</span>
@@ -77,7 +108,9 @@ const MovieDetails = ({
                 <button
                   className="flex-shrink-0 w-[120px] h-[170px] bg-[#283747] rounded-md overflow-hidden shadow-md hover:scale-105 duration-300"
                   key={cast?.id}
-                  onClick={() => setPersonDetails(cast?.profileImage, cast?.id)}
+                  onClick={() =>
+                    setPersonDetails(cast?.profileImage, cast?.id.toString())
+                  }
                 >
                   <div className="w-full h-[70%]">
                     <img

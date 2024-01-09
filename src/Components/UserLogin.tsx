@@ -6,7 +6,13 @@ import DualTab from "./DualTab";
 import PasswordRecovery from "./PasswordRecovery";
 import UserManager from "../API/UserSignUp";
 import PhoneVerification from "./PhoneVerification";
-const UserLogin = ({ showLogin, setShowLoading }) => {
+const UserLogin = ({
+  showLogin,
+  setShowLoading,
+}: {
+  showLogin: boolean;
+  setShowLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [signUpChoice, setSignUpChoice] = useState("Login");
   const [passwordRecovery, setPasswordRecovery] = useState(false);
   const [phoneVerification, setPhoneVerification] = useState(false);
@@ -30,7 +36,7 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
     loginFormSubmitted: false,
   });
 
-  const exitLogin = (token) => {
+  const exitLogin = (token: string) => {
     console.log(token);
     const tokenString = JSON.stringify(token);
     localStorage.setItem("token", tokenString);
@@ -76,7 +82,7 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
     }
   }, [submitStatus, login_user, loginForm]);
 
-  const onChangeRegister = (e) => {
+  const onChangeRegister = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setRegisterForm((prevForm) => ({
       ...prevForm,
@@ -84,7 +90,7 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
     }));
   };
 
-  const onChangeLogin = (e) => {
+  const onChangeLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLoginForm((prevForm) => ({
       ...prevForm,
@@ -92,14 +98,14 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
     }));
   };
 
-  const onSubmitRegister = (event) => {
+  const onSubmitRegister = (event: React.FormEvent) => {
     event.preventDefault();
     setSubmitStatus((prevForm) => ({
       ...prevForm,
       registerFormSubmitted: true,
     }));
   };
-  const onSubmitLogin = (event) => {
+  const onSubmitLogin = (event: React.FormEvent) => {
     event.preventDefault();
     console.log(loginForm);
     setSubmitStatus((prevForm) => ({
@@ -128,12 +134,11 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
       Password: "",
     });
   }, [signUpChoice, showLogin, phoneVerification, passwordRecovery]);
+  type SetDefaultType = () => void;
 
-  const setDefault = (close) => {
-    if (close === "close") {
-      setShowLoading(false);
-      setSignUpChoice("Login");
-    }
+  const setDefault: SetDefaultType = () => {
+    setShowLoading(false);
+    setSignUpChoice("Login");
   };
 
   return (
@@ -168,7 +173,7 @@ const UserLogin = ({ showLogin, setShowLoading }) => {
           />
 
           <div className="absolute top-0 right-0 group">
-            <button className="px-3 py-3" onClick={() => setDefault("close")}>
+            <button className="px-3 py-3" onClick={() => setDefault()}>
               <div className="group-hover:scale-110 group-hover:rotate-90 duration-300">
                 <IoMdClose size={30} />
               </div>

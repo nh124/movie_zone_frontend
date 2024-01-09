@@ -1,7 +1,13 @@
 import YouTube from "react-youtube";
 import { IoClose } from "react-icons/io5";
 import CalculateAspectRatio from "../Rawfiles/CalculateAspectRatio";
-const VideoPlayer = ({ videoId, setPlayTrailers }) => {
+const VideoPlayer = ({
+  videoId,
+  setPlayTrailers,
+}: {
+  videoId: string;
+  setPlayTrailers: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const calculateAspectRatio = CalculateAspectRatio();
   const { width, height } = calculateAspectRatio;
   const opts = {

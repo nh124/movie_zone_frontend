@@ -6,7 +6,7 @@ import GridLayout from "../Components/GridLayout";
 import GridResize from "../Hooks/gridResize";
 import UpdatePage from "../Components/UpdatePage";
 import RemoveDuplicatesFilter from "../Rawfiles/RemoveDuplicatesFilter";
-import ResponseResultType from "../Types/responseResultType";
+import ResponseResultType from "../Types/ResponseResultType";
 import { useEffect, useState } from "react";
 import MovieManager from "../API/MovieManager";
 import { setSubmitFilter } from "../Redux/filterReducer";
@@ -27,7 +27,7 @@ const Movies = () => {
   const [filteredDiscoverMovies, setFilteredDiscoverMovies] = useState<
     Array<ResponseResultType>
   >([]);
-  const { length } = useSelector((state) => state.GridSize);
+  const { length } = useSelector((state: any) => state.GridSize);
 
   type responseType = {
     page: number;

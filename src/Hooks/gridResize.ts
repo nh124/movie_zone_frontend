@@ -4,9 +4,9 @@ import { setStart, setEnd } from "../Redux/GridSizeIndexReducer";
 import { setLength } from "../Redux/GridSizeReducer";
 const GridResize = () => {
   const dispatch = useDispatch();
-  const { end } = useSelector((state) => state.GridSizeIndex);
-  const { currentTab } = useSelector((state) => state.MovieStatusTab);
-  const { length } = useSelector((state) => state.GridSize);
+  const { end } = useSelector((state: any) => state.GridSizeIndex);
+  const { currentTab } = useSelector((state: any) => state.MovieStatusTab);
+  const { length } = useSelector((state: any) => state.GridSize);
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 500) dispatch(setLength(6));

@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import UserManager from "../API/UserSignUp";
-
-const ResetPassword = (PhoneEmailVerificationForm) => {
+type PhoneEmailVerificationFormType = {
+  email: string;
+  phone: string;
+};
+const ResetPassword = (
+  PhoneEmailVerificationForm: PhoneEmailVerificationFormType
+) => {
   const [status, setStatus] = useState({});
 
   const { reset_password } = UserManager();

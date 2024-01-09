@@ -6,9 +6,9 @@ import DateConverter from "../Rawfiles/DateConverter";
 import { useNavigate } from "react-router-dom";
 const SplashImage = () => {
   const splashImageData = ParseSplashImageData();
-  const convertRating = (rating, stars) => {
-    return Math.round((rating / 10) * stars);
-  };
+  // const convertRating = (rating, stars) => {
+  //   return Math.round((rating / 10) * stars);
+  // };
 
   const [textLimit, setTextLimit] = useState(100);
   const [bannerIndex, setBannerIndex] = useState(0);
@@ -65,9 +65,9 @@ const SplashImage = () => {
           </span>
         </div>
         <div className="sm:flex flex-row gap-3 flex-wrap w-full py-3 hidden">
-          {splashImageData[bannerIndex]?.genre?.map((genre) => (
+          {splashImageData[bannerIndex]?.genre?.map((genre, index) => (
             <span
-              key={genre?.id}
+              key={index}
               className="bg-gray-700/70 sm:px-2 px-3 py-1 rounded-lg text-sm sm:text-base"
             >
               {genre}
@@ -101,16 +101,19 @@ const SplashImage = () => {
         </div>
         <div className="absolute bottom-5 flex flex-row right-5 sm:left-10">
           {Array.from({ length: splashImageData?.length }).map(
-            (_, arrayIndex) =>
-              bannerIndex === arrayIndex ? (
-                <button onClick={() => setBannerIndex(arrayIndex)}>
-                  <GoDotFill />
-                </button>
-              ) : (
-                <button onClick={() => setBannerIndex(arrayIndex)}>
-                  <GoDot />
-                </button>
-              )
+            (_, arrayIndex) => (
+              <div key={arrayIndex}>
+                {bannerIndex === arrayIndex ? (
+                  <button onClick={() => setBannerIndex(arrayIndex)}>
+                    <GoDotFill />
+                  </button>
+                ) : (
+                  <button onClick={() => setBannerIndex(arrayIndex)}>
+                    <GoDot />
+                  </button>
+                )}
+              </div>
+            )
           )}
         </div>
       </div>

@@ -6,21 +6,25 @@ import GridLayout from "../Components/GridLayout";
 import { useSelector } from "react-redux";
 import GridResize from "../Hooks/gridResize";
 import UpdatePage from "../Components/UpdatePage";
+import ResponseResultType from "../Types/ResponseResultType";
 import RemoveDuplicatesFilter from "../Rawfiles/RemoveDuplicatesFilter";
 const SearchResult = () => {
   const { searchedMovie } = useParams();
   const [showLogin, setShowLoading] = useState(false);
   const [pageLimit, setPageLimit] = useState(0);
-  const [searchedResult, setSearchResult] = useState([]);
-  const [finalSearchedResult, setFinalSearchedResult] = useState([]);
+  const [searchedResult, setSearchResult] = useState<ResponseResultType[]>([]);
+  const [finalSearchedResult, setFinalSearchedResult] = useState<
+    ResponseResultType[]
+  >([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchStatus, setSearchStatus] = useState(true);
 
   const { searchMovie } = MovieManager();
-  const { start, end } = useSelector((state) => state.GridSizeIndex);
+  const { start, end } = useSelector((state: any) => state.GridSizeIndex);
 
   useEffect(() => {
     const filterMovies = RemoveDuplicatesFilter(searchedResult);
+    // console.log(filterMovies);
     setFinalSearchedResult(filterMovies);
     console.log(searchedResult);
   }, [searchedResult]);
@@ -33,7 +37,10 @@ const SearchResult = () => {
     searchMovie(currentPage, searchedMovie)
       .then((response) => {
         setPageLimit(response.total_pages);
-        setSearchResult((prev) => [...prev, ...response.results]);
+        setSearchResult((prev: ResponseResultType[]) => [
+          ...prev,
+          ...response.results,
+        ]);
         setSearchStatus(false);
       })
       .catch((error) => {

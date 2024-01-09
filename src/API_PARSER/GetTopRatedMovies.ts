@@ -1,14 +1,29 @@
 import { useEffect, useState } from "react";
 import MovieManager from "../API/MovieManager";
 import { useSelector } from "react-redux";
-
 const GetTopRatedMovies = () => {
   const { getTopRated } = MovieManager();
-  const [trendingMovies, setTrendingMovies] = useState([{}]);
+  const [trendingMovies, setTrendingMovies] = useState([
+    {
+      adult: false,
+      backdrop_path: "",
+      genre_ids: [],
+      id: 0,
+      original_title: "",
+      overview: "",
+      popularity: 0,
+      poster_path: "",
+      release_date: "",
+      title: "",
+      video: false,
+      vote_average: 0,
+      vote_count: 0,
+    },
+  ]);
   const { TrendingMoviePageIndex } = useSelector(
     (state: any) => state.MovieIndex
   );
-  const filter = (movies) => {
+  const filter = (movies: any) => {
     const movie_list = [];
     for (const movie of movies) {
       if (

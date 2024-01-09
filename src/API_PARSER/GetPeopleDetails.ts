@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import MovieManager from "../API/MovieManager";
 
-const GetPeopleDetails = (type, personID) => {
+const GetPeopleDetails = (type: string, personID: number) => {
   const [movieDetails, setMovieDetails] = useState({});
   const { getMovieDetails } = MovieManager();
 
   const getDetails = () => {
-    getMovieDetails(type, personID)
+    getMovieDetails(personID, type)
       .then((response) => {
         setMovieDetails(response);
       })
@@ -16,7 +16,7 @@ const GetPeopleDetails = (type, personID) => {
   };
 
   useEffect(() => {
-    if (personID === undefined || personID === null || personID === "") return;
+    if (personID === undefined || personID === null || !personID) return;
     getDetails();
   }, [personID]);
 
