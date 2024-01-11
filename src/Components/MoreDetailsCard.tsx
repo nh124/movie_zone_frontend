@@ -58,7 +58,7 @@ const MoreDetailsCard = ({
     crew: Array<creditContributionType>;
   };
 
-  // console.log(type, imageURL);
+  console.log(type, imageURL);
   const { getPeopleDetails } = MovieManager();
   const [personDetails, setPersonDetails] = useState<PeopleDetailsType | null>(
     null
