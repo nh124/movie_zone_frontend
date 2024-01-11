@@ -7,12 +7,12 @@ div::-webkit-scrollbar {
 }
 
 div::-webkit-scrollbar-thumb {
-  background-color: rgb(87, 87, 87); /* Set the color of the thumb */
+  background-color: #23405d; /* Set the color of the thumb */
   border-radius: 10px; /* Set the border radius of the thumb */
 }
 
 div::-webkit-scrollbar-track {
-  background-color: rgb(44, 44, 44); /* Set the color of the track */
+  background-color: #162e46; /* Set the color of the track */
   border-radius: 10px;
 }
 

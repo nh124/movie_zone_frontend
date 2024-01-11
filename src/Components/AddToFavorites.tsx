@@ -72,7 +72,7 @@ const AddToFavorites = ({
       return;
 
     if (updateUserListStatus) {
-      console.log("updateUserListStatus");
+      // console.log("updateUserListStatus");
       updateUserList(favorites, storedToken)
         .then((response) => {
           console.log(response);

@@ -58,7 +58,7 @@ const MoreDetailsCard = ({
     crew: Array<creditContributionType>;
   };
 
-  console.log(type, imageURL);
+  // console.log(type, imageURL);
   const { getPeopleDetails } = MovieManager();
   const [personDetails, setPersonDetails] = useState<PeopleDetailsType | null>(
     null
@@ -126,21 +126,21 @@ const MoreDetailsCard = ({
 
   return (
     <div
-      className={`w-full h-screen  top-0 left-0 z-30 ${
+      className={`w-full h-screen  top-0 left-0 z-30 animate-fadeAnimation ${
         showPeopleDetails ? "absolute" : "hidden"
       }`}
     >
       <div className="w-full h-full relative bg-black/70 z-30">
         <div
-          className={`sm:w-[700px] sm:h-[700px] absolute bg-[#283747] sm:top-1/2 sm:transform sm:-translate-y-1/2 left-1/2 transform -translate-x-1/2 px-4 py-4 w-full h-auto top-0 duration-400 `}
+          className={`sm:w-[700px] sm:h-[700px] absolute bg-[#283747] sm:top-1/2 sm:transform sm:-translate-y-1/2 left-1/2 transform -translate-x-1/2 px-4 py-4 w-full h-screen top-0 duration-400`}
         >
           <button
-            className="absolute right-0 top-0 p-2 bg-gray-700 hover:scale-105 duration-300 z-10 "
+            className="absolute left-0 top-0 p-2 bg-gray-700 hover:scale-105 duration-300 z-10 "
             onClick={() => clearData()}
           >
             <IoMdClose size="20" color="white" />
           </button>
-          <div className="w-full h-full flex sm:flex-row relative flex-col gap-3 sm:gap-0 p-5">
+          <div className="w-full h-full flex sm:flex-row relative flex-col gap-3 sm:gap-0 p-5 overflow-auto ">
             <div className="w-full h-fit sm:h-full flex flex-col items-center">
               <div className="w-full h-[250px] p-4 flex justify-center items-center">
                 <div className="w-[220px] h-[220px] bg-slate-500 rounded-full overflow-hidden shadow-lg">
@@ -197,7 +197,7 @@ const MoreDetailsCard = ({
                 )}
               </div>
             </div>
-            <div className="w-full h-full p-5 overflow-y-auto bg-gradient-to-t from-gray-700 rounded-md">
+            <div className="w-full h-full p-5 sm:overflow-y-auto bg-gradient-to-t from-gray-700 rounded-md">
               <div className="w-full h-full">
                 <div className="w-full">
                   <span className="text-lg font-bold text-gray-400">

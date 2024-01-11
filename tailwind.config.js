@@ -6,7 +6,6 @@ export default {
       keyframes: {
         zoominAnimation: {
           "0%": { transform: "scale(0)" },
-          "50%": { transform: "scale(1.2)" },
           "100%": { transform: "scale(1)" },
         },
         zoomoutAnimation: {
@@ -53,7 +52,7 @@ export default {
         zoomoutAnimation: "zoomoutAnimation 1s ease-in-out ",
         slideAnimation: "slideAnimation 0.5s ease-in-out ",
         traverAnimate: "traver 1s ease-in-out ",
-        fadeAnimation: "fade 1s ease-in-out ",
+        fadeAnimation: "fade 0.5s ease-in-out ",
         flashAnimation: "flash 1s ease-in-out ",
         nodeSlideAnimation: "nodeSlide 1s ease-in-out infinite",
         nodeSlideUpAnimation: "nodeSlideUp 1s ease-in-out infinite",
