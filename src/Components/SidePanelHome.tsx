@@ -1,6 +1,6 @@
 import { FaHeart } from "react-icons/fa";
 import UserListManager from "../API/UserListManager";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MovieManager from "../API/MovieManager";
 import { IoIosStar } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
@@ -30,17 +30,42 @@ const SidePanelHome = () => {
     const tokenExpired = storedTokenJson?.expired;
     return { storedToken, tokenExpired };
   };
+  type intervalType = NodeJS.Timeout;
   const { storedToken } = getToken();
-
+  const [hoveredMovie, setHoveredMovie] = useState<number | null>(null);
+  const [textOffset, setTextOffset] = useState(0);
   const [moviesIds, setMoviesIds] = useState([]);
   const { getUserLists } = UserListManager();
   const [getUserListsStatus, setGetUserLists] = useState(true);
   const [convertToJson, setConvertToJson] = useState(false);
   const [favoriteMovies, setFavoriteMovies] = useState<movieType[]>([]);
-
+  const [intervalId, setIntervalId] = useState<intervalType>();
   const { getMovieDetails } = MovieManager();
-
+  const [overFlow, setOverFlow] = useState(false);
+  const [hover, setHover] = useState(false);
+  const textContent = useRef(null);
+  const container = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (overFlow && hover) {
+      // Start the interval and store its ID
+      const id = setInterval(() => {
+        setTextOffset((prev) => prev + 10);
+        console.log(textOffset);
+      }, 5);
+
+      // Store the interval ID in state
+      setIntervalId(id);
+    } else {
+      // Clear the interval and reset textOffset to 0
+      clearInterval(intervalId);
+      setTextOffset(0);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [overFlow, hover]);
+
   const calculateScoreAverage = (voting_average: number) => {
     const ratingAvg = Math.round(voting_average);
     return `${ratingAvg * 10}%`;
@@ -71,6 +96,19 @@ const SidePanelHome = () => {
       setConvertToJson(false);
     });
   }, [getMovieDetails, convertToJson, moviesIds]);
+  type textContentType = {
+    offsetWidth: number;
+  };
+  type containerContType = {
+    scrollWidth: number;
+  };
+  useEffect(() => {
+    if (textContent?.current === null || container?.current === null) return;
+    const textCont = textContent?.current as textContentType;
+    const containerCont = container?.current as containerContType;
+
+    if (textCont.offsetWidth >= containerCont.scrollWidth) setOverFlow(true);
+  }, [favoriteMovies]);
 
   useEffect(() => {
     if (storedToken === undefined) return;
@@ -87,12 +125,12 @@ const SidePanelHome = () => {
         console.log(err);
       });
   }, [getUserLists, getUserListsStatus, storedToken]);
-
+  console.log(overFlow);
   useEffect(() => {
     console.log(favoriteMovies);
   }, [favoriteMovies]);
   return (
-    <div className="w-full sm:w-[30%] h-[700px]">
+    <div className="w-full sm:w-[40%] h-[400px] md:h-[800px]">
       <div className="w-full h-full px-3 py-3">
         <div className="flex flex-col w-full h-full relative shadow-lg bg-gradient-to-t from-[#394554] rounded-lg">
           <div className="absolute w-[70%] h-[4px] sm:w-[4px] sm:h-[60%] sm:top-1/2 transform sm:-translate-y-1/2 -translate-x-1/2 left-1/2 sm:translate-x-0 sm:-left-4 rounded-lg bg-slate-500 -top-4"></div>
@@ -102,23 +140,6 @@ const SidePanelHome = () => {
             >
               Favorites
             </button>
-            {/* <button
-                  onClick={() => setCollectionTab("Watch Later")}
-                  className={`relative w-full h-full z-10 ${
-                    collectionTab === "Watch Later"
-                      ? "text-gray-700"
-                      : "text-gray-300 border-t border-r border-b border-gray-500"
-                  }`}
-                >
-                  Watch Later
-                </button> */}
-            {/* <div
-                  className={`w-[50%] duration-300 h-full absolute top-0 bg-[#60A5FA] ${
-                    collectionTab === "Favorites"
-                      ? "translate-x-0"
-                      : "translate-x-[100%]"
-                  }`}
-                ></div> */}
           </div>
 
           {favoriteMovies.length <= 0 ? (
@@ -129,21 +150,57 @@ const SidePanelHome = () => {
             </div>
           ) : (
             <div className="w-full h-full flex flex-col px-3 py-6 text-gray-300 gap-4 overflow-y-auto">
-              {favoriteMovies.map((movie: movieType) => (
+              {favoriteMovies.map((movie: movieType, index: number) => (
                 <button
-                  className="w-full h-[100px] p-2 flex flex-row relative bg-slate-800 shadow-xl rounded-lg hover:scale-[100%] scale-95 duration-300"
+                  className="w-full h-auto p-2 flex flex-row relative bg-slate-800 shadow-xl rounded-lg hover:scale-[100%] scale-95 duration-300"
                   key={movie?.id}
                   onClick={() => navigate(`/movie/${movie.id}`)}
                 >
-                  <div className="w-[20%] h-full overflow-hidden">
+                  <div className="w-[40%] h-full overflow-hidden bg">
                     <img
                       src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
                       className="w-full h-full object-cover"
                       alt=""
                     />
                   </div>
-                  <div className="w-[80%] h-full py-3 px-3 font-bold flex flex-col items-start gap-3">
-                    <span>{movie?.title}</span>
+                  <div
+                    className="w-full h-full py-3 px-3 font-bold flex flex-col items-start gap-3 overflow-hidden group"
+                    onMouseEnter={() => {
+                      setHover(true);
+                      setHoveredMovie(index);
+                    }}
+                    onMouseLeave={() => {
+                      setHover(false);
+                      setHoveredMovie(null);
+                    }}
+                  >
+                    <div ref={container} className={`w-full h-auto text-start`}>
+                      {overFlow ? (
+                        <div
+                          className="flex flex-row transition-height "
+                          style={{
+                            transform: `translateX(-${
+                              hoveredMovie === index ? textOffset : 0
+                            }px)`,
+                            transition: `${
+                              hoveredMovie === index ? "transform 10s ease" : ""
+                            }`,
+                          }}
+                        >
+                          <span className="whitespace-nowrap" ref={textContent}>
+                            {hover && hoveredMovie === index
+                              ? movie?.title
+                              : movie?.title.slice(0, 17)}
+                          </span>
+                          {!hover && hoveredMovie !== index && <span>...</span>}
+                        </div>
+                      ) : (
+                        <span className="whitespace-nowrap" ref={textContent}>
+                          {movie?.title}
+                        </span>
+                      )}
+                    </div>
+
                     <div
                       className="flex flex-row gap-3 text-sm"
                       title="Average Score"

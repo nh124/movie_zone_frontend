@@ -8,6 +8,7 @@ import GridLayout from "../Components/GridLayout";
 import UserLogin from "../Components/UserLogin";
 import { useState } from "react";
 import SidePanelHome from "../Components/SidePanelHome";
+import Footer from "../Components/Footer";
 const Home = () => {
   const { currentTab } = useSelector((state: any) => state.MovieStatusTab);
   const { start, end } = useSelector((state: any) => state.GridSizeIndex);
@@ -31,6 +32,7 @@ const Home = () => {
         </div>
         <SidePanelHome />
       </div>
+      <Footer />
     </PageLayout>
   );
 };

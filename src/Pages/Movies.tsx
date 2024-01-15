@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import MovieManager from "../API/MovieManager";
 import { setSubmitFilter } from "../Redux/filterReducer";
 import { setEnd, setStart } from "../Redux/GridSizeIndexReducer";
+import Footer from "../Components/Footer";
 const Movies = () => {
   const { start, end } = useSelector((state: any) => state.GridSizeIndex);
   const [discoverMovies, setDiscoverMovies] = useState<
@@ -119,6 +120,7 @@ const Movies = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </PageLayout>
   );
 };

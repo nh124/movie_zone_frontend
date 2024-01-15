@@ -20,6 +20,7 @@ const AddToFavorites = ({
     email: "",
     favorites: "",
   });
+
   const [favoritesStatus, setFavoritesStatus] = useState(false);
   const [userListStatus, setUserListStatus] = useState(true);
 
@@ -28,7 +29,9 @@ const AddToFavorites = ({
   const { AddToUserList, GetUserList, updateUserList, deleteFromUserList } =
     UserListManager();
 
+  console.log(userList);
   useEffect(() => {
+    console.log(userListStatus);
     if (
       storedToken === undefined ||
       storedToken === null ||
@@ -38,18 +41,18 @@ const AddToFavorites = ({
       return;
     GetUserList(storedToken)
       .then((response) => {
+        console.log(response);
         setUserList(response?.message);
         setUserListStatus(false);
-        // console.log(response);
       })
-      .catch(() => {
-        // console.log(error);
+      .catch((error) => {
+        console.log(error);
         setUserListStatus(false);
       });
   }, [GetUserList, storedToken, userListStatus]);
 
   useEffect(() => {
-    if (userList?.email !== undefined || !favoritesStatus) {
+    if (userList?.email !== "" || !favoritesStatus) {
       return;
     }
     if (storedToken === undefined || storedToken === null || storedToken === "")
@@ -84,7 +87,7 @@ const AddToFavorites = ({
           setUpdateUserListStatus(false);
         });
     }
-  }, [updateUserList, updateUserListStatus, storedToken, favorites]);
+  }, [updateUserList, updateUserListStatus, storedToken, favorites, userList]);
 
   useEffect(() => {
     if (storedToken === undefined || storedToken === null || storedToken === "")
@@ -106,6 +109,7 @@ const AddToFavorites = ({
   }, [deleteFromUserList, deleteUserListStatus, storedToken, favorites]);
 
   const AddMovies = () => {
+    console.log(userList);
     if (storedToken === undefined) {
       dispatch(setNotificationStatus(true));
     }
@@ -113,7 +117,7 @@ const AddToFavorites = ({
       ...prev,
       favorite: movieId.toString(),
     }));
-    if (userList?.email === undefined) {
+    if (userList?.email === "") {
       setFavoritesStatus(true);
     } else {
       setUpdateUserListStatus(true);

@@ -22,7 +22,7 @@ const UserManager = () => {
     password: string;
   };
 
-  type CodeVerificationFormType = { email: ""; verification_code: "" };
+  type CodeVerificationFormType = { email: string; verification_code: string };
 
   const register_user = async (registerFormData: registerFormType) => {
     try {

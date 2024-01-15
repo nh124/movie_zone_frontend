@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { IoPersonSharp } from "react-icons/io5";
 import GetUser from "../Hooks/GetUser";
@@ -39,21 +39,22 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
   };
 
   const user = getUser();
-  const [comments, setComments] = useState([
-    {
-      id: 0,
-      comment: "",
-      date: "",
-      dislike: 0,
-      like: 0,
-      movieId: 0,
-      name: "",
-    },
-  ]);
+
+  type commentsType = {
+    id: 0;
+    comment: "";
+    date: "";
+    dislike: 0;
+    like: 0;
+    movieId: 0;
+    name: "";
+  };
+  const [comments, setComments] = useState<commentsType[]>([]);
   const [textareaHeight, setTextareaHeight] = useState("50px");
   const [text, setText] = useState({ movieId: 0, comment: "" });
   const [sendCommentStatus, setSendCommentStatus] = useState(false);
   const [getCommentsStatus, setGetCommentsStatus] = useState(false);
+  const [expandComments, setExpandComments] = useState(false);
   const dispatch = useDispatch();
   const [updateCommentStatus, setUpdateCommentStatus] = useState({
     id: 0,
@@ -73,11 +74,34 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
 
     if (hours < 1 && minutes < 1) return `a few seconds ago`;
     if (hours <= 0 && minutes > 0) return `${minutes} minutes ago`;
-    if (hours > 0) return `${hours} hours ago`;
-    if (hours > 24 && days > 0) return `${days} days ago`;
+    if (hours > 0 && hours < 24) return `${hours} hours ago`;
+    if (hours >= 24 && days > 0) return `${days} days ago`;
     if (days > 30 && months > 0) return `${months} months ago`;
     if (months > 12 && years > 0) return `${years} years ago`;
   };
+  const commentsContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    console.log(commentsContainerRef.current);
+    const handleClickOutside = (event: MouseEvent) => {
+      const containerRef = commentsContainerRef.current;
+      if (
+        expandComments &&
+        containerRef &&
+        !containerRef.contains(event.target as Node)
+      ) {
+        containerRef.scrollTop = 0;
+        setExpandComments((prev) => !prev);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [expandComments]);
+
   useEffect(() => {
     setGetCommentsStatus(true);
   }, []);
@@ -102,6 +126,7 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
 
     addComment(text, storedToken)
       .then(() => {
+        setExpandComments(true);
         setGetCommentsStatus(true);
         setSendCommentStatus(false);
       })
@@ -143,12 +168,12 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
   };
 
   return (
-    <div className="w-full sm:w-[70%] min-h-[400px] h-auto sm:pl-[4%] sm:pr-3 py-6">
-      <div className="w-full sm:w-[90%] sm:px-3 px-1 py-1">
+    <div className="w-full sm:w-full min-h-[200px] h-auto sm:pl-[4%] sm:pr-3 py-6 ">
+      <div className="w-full sm:w-[90%] sm:px-3 px-1 py-1 flex flex-col gap-3">
         <span className="text-xl font-bold text-gray-400">
           Share your thoughts
         </span>
-        <div className="w-full h-[100px] flex flex-row justify-center items-center"></div>
+
         <div className="flex flex-col gap-7">
           <form
             action=""
@@ -178,62 +203,77 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
             />
           </form>
           {/* comment */}
-          <div className="w-full h-auto flex flex-col rounded-lg bg-[#2e4156] shadow-lg py-[4%] px-[4%] gap-[3.75rem] text-gray-300 sm:text-base text-sm">
-            {comments?.map((comment, index) => (
-              <div
-                className="flex flex-row relative w-full h-full gap-4 shadow-lg py-3"
-                key={comment?.id}
-              >
-                <div className="w-[50px] h-[50px] flex justify-center items-center rounded-lg bg-slate-800">
-                  <IoPersonSharp size={30} color="gray" />
-                </div>
-
-                <div className="flex flex-col h-auto w-full gap-2 relative">
-                  <EditCommentFunc
-                    setGetCommentsStatus={setGetCommentsStatus}
-                    storedToken={storedToken}
-                    commentId={comment?.id}
-                    updateCommentStatus={updateCommentStatus}
-                    index={index}
-                    setUpdateCommentStatus={setUpdateCommentStatus}
-                  />
-                  <div className="w-full flex flex-row justify-between items-center">
-                    <div className="w-fit h-[50px] flex justify-center flex-col">
-                      <button className="font-bold text-gray-300 text-lg w-fit">
-                        {comment?.name}
-                      </button>
-                      <span>{getTime(comment?.date)}</span>
+          {comments.length > 0 && (
+            <div
+              ref={commentsContainerRef}
+              className={`w-full h-auto min-h-[300px] max-h-[700px] flex flex-col rounded-lg bg-[#2e4156] shadow-lg py-[4%] px-[4%] gap-[3.75rem] text-gray-300 sm:text-base text-sm transition-height relative ${
+                expandComments ? "overflow-auto" : "overflow-hidden"
+              } `}
+              style={{
+                height: `${
+                  expandComments ? (comments.length - 2) * 300 + 150 : 300
+                }px`,
+                transition: "height 0.3s ease",
+              }}
+            >
+              {comments
+                ?.slice()
+                ?.reverse()
+                ?.map((comment, index) => (
+                  <div
+                    className="flex flex-row relative w-full h-fit gap-4 shadow-lg py-3"
+                    key={comment?.id}
+                  >
+                    <div className="w-[50px] h-[50px] flex justify-center items-center rounded-lg bg-slate-800">
+                      <IoPersonSharp size={30} color="gray" />
                     </div>
-                    <div className="flex flex-row gap-3 px-3">
-                      {comment?.name === user?.name && (
-                        <button
-                          className="hover:scale-110 duration-300"
-                          onClick={() =>
-                            setUpdateCommentStatus({
-                              id: index,
-                              status: true,
-                            })
-                          }
-                        >
-                          <AiFillEdit size={25} />
-                        </button>
-                      )}
-                      {comment?.name === user?.name && (
-                        <DeleteComment
-                          commentId={comment?.id}
-                          storedToken={storedToken}
-                          setGetCommentsStatus={setGetCommentsStatus}
-                        />
-                      )}
+
+                    <div className="flex flex-col h-fit w-full gap-2 relative">
+                      <EditCommentFunc
+                        setGetCommentsStatus={setGetCommentsStatus}
+                        storedToken={storedToken}
+                        commentId={comment?.id}
+                        updateCommentStatus={updateCommentStatus}
+                        index={index}
+                        setUpdateCommentStatus={setUpdateCommentStatus}
+                      />
+                      <div className="w-full flex flex-row justify-between items-center">
+                        <div className="w-fit h-[50px] flex justify-center flex-col">
+                          <button className="font-bold text-gray-300 text-lg w-fit">
+                            {comment?.name}
+                          </button>
+                          <span>{getTime(comment?.date)}</span>
+                        </div>
+                        <div className="flex flex-row gap-3 px-3">
+                          {comment?.name === user?.name && (
+                            <button
+                              className="hover:scale-110 duration-300"
+                              onClick={() =>
+                                setUpdateCommentStatus({
+                                  id: index,
+                                  status: true,
+                                })
+                              }
+                            >
+                              <AiFillEdit size={25} />
+                            </button>
+                          )}
+                          {comment?.name === user?.name && (
+                            <DeleteComment
+                              commentId={comment?.id}
+                              storedToken={storedToken}
+                              setGetCommentsStatus={setGetCommentsStatus}
+                            />
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="w-full h-auto flex items-center py-1">
+                        <span className="">{comment?.comment}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="w-full h-auto flex items-center py-1">
-                    <span className="">{comment?.comment}</span>
-                  </div>
-                </div>
-
-                {/* <div className="w-fit h-auto absolute -bottom-7 -right-3 flex justify-end px-3 py-2 gap-4 rounded-md bg-slate-800 text-sm">
+                    {/* <div className="w-fit h-auto absolute -bottom-7 -right-3 flex justify-end px-3 py-2 gap-4 rounded-md bg-slate-800 text-sm">
                   <button
                     className="hover:scale-110 duration-300 shadow-lg flex flex-row gap-2"
                     onClick={() => UpdateLike(comment?.id)}
@@ -249,9 +289,20 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
                     {comment?.dislike}
                   </button>
                 </div> */}
-              </div>
-            ))}
-          </div>
+                  </div>
+                ))}
+              <button
+                className={`w-full h-[100px] bottom-0 left-0 bg-gradient-to-b to-[#283747]/90 from-[#2E4056]/90 flex justify-center items-end py-4 ${
+                  expandComments ? "hidden" : "absolute"
+                }`}
+                onClick={() => setExpandComments(true)}
+              >
+                <span className="text-lg font-bold text-gray-500 animate-pulse">
+                  Show More
+                </span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import GridResize from "../Hooks/gridResize";
 import UpdatePage from "../Components/UpdatePage";
 import ResponseResultType from "../Types/ResponseResultType";
 import RemoveDuplicatesFilter from "../Rawfiles/RemoveDuplicatesFilter";
+import Footer from "../Components/Footer";
 const SearchResult = () => {
   const { searchedMovie } = useParams();
   const [showLogin, setShowLoading] = useState(false);
@@ -65,6 +66,7 @@ const SearchResult = () => {
           MovieList={finalSearchedResult}
         ></GridLayout>
       </div>
+      <Footer />
     </PageLayout>
   );
 };

@@ -37,7 +37,7 @@ const EditComment = ({
     setUpdatedComment({
       comment: e.target.value,
     });
-    // console.log(e.target.value);
+    console.log(e.target.value);
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {

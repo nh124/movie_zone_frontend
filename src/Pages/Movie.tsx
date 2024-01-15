@@ -20,6 +20,7 @@ import { IoMdClose } from "react-icons/io";
 import { setNotificationStatus } from "../Redux/NotificationReducer";
 import MoreDetailsCard from "../Components/MoreDetailsCard";
 import ImageEnlarge from "../Components/ImageEnlarge";
+import Footer from "../Components/Footer";
 const Movie = () => {
   const { movieId } = useParams();
   type VideoType = {
@@ -145,6 +146,7 @@ const Movie = () => {
           setSelectedImageArray={setSelectedImageArray}
         />
         <MovieComments movieId={movie_id} />
+        <Footer />
       </PageLayout>
     </div>
   );

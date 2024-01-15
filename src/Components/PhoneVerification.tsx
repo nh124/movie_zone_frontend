@@ -10,91 +10,42 @@ const PhoneVerification = ({
   setPhoneVerification,
   setShowLoading,
   setSignUpChoice,
+  registerForm,
 }: {
   phoneVerification: boolean;
   setPhoneVerification: React.Dispatch<React.SetStateAction<boolean>>;
   setShowLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setSignUpChoice: React.Dispatch<React.SetStateAction<string>>;
+  registerForm: any;
 }) => {
-  type CodeVerificationFormType = { email: ""; verification_code: "" };
-  const Steps = [
-    { no: 1, step: "Send" },
-    { no: 2, step: "Verify" },
-  ];
-  const [status, setStatus] = useState({
+  const [verificationCode, setVerificationCode] = useState("");
+  const [submitStatus, setSubmitStatus] = useState({
     status: "",
     message: "",
   });
-  const [PhoneEmailVerification, setPhoneEmailVerification] = useState({
-    email: "",
-    phone: "",
-  });
-  const { reset_password, verify_code } = UserManager();
-
-  const [submitStatus, setSubmitStatus] = useState({
-    phoneSubmitted: false,
-    verifyCodeSubmitted: false,
-    updatePasswordSubmitted: false,
-  });
-
-  const [currentStep, setCurrentStep] = useState({ no: 1, step: "Send" });
-
-  const [code, setCode] = useState<CodeVerificationFormType>({
-    email: "",
-    verification_code: "",
-  });
-  const [newPassword, setNewPassword] = useState({
-    password: "",
-    confirmPassword: "",
-  });
-
-  const setDefault = () => {
-    setShowLoading(false);
-    setPhoneVerification(false);
-    setSignUpChoice("Login");
-    setCurrentStep({ no: 1, step: "Send" });
-    setCode({ email: "", verification_code: "" });
-    setNewPassword({
-      password: "",
-      confirmPassword: "",
-    });
-    setSubmitStatus({
-      phoneSubmitted: false,
-      verifyCodeSubmitted: false,
-      updatePasswordSubmitted: false,
-    });
-    setPhoneEmailVerification({
-      email: "",
-      phone: "",
-    });
-    setStatus({
-      status: "",
-      message: "",
-    });
+  const onChangeVerificationCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVerificationCode(e.target.value);
   };
-
+  const onSubmitVerificationCode = (event: React.FormEvent) => {
+    event.preventDefault();
+    setVerificationCodeStatus(true);
+  };
+  const [verificationCodeSent, setVerificationCodeSent] = useState(true);
+  const { verify_code, reset_password } = UserManager();
+  const [verificationCodeStatus, setVerificationCodeStatus] = useState(false);
+  const [verificationSuccessful, setVerificationSuccessful] = useState(false);
   useEffect(() => {
-    if (newPassword.password !== newPassword.confirmPassword) {
-      setStatus({
-        status: "300",
-        message: "Password does not match",
-      });
-    } else {
-      setStatus({
-        status: "",
-        message: "",
-      });
-    }
-  }, [newPassword]);
-
-  useEffect(() => {
-    const { email, phone } = PhoneEmailVerification;
-    if (email === "" || phone === "") return;
-    if (submitStatus.phoneSubmitted) {
-      reset_password(PhoneEmailVerification)
+    const { Email, Phone } = registerForm;
+    if (Email === "" || Phone === "") return;
+    const phoneVerificationForm = {
+      email: Email,
+      phone: Phone,
+    };
+    if (phoneVerification && verificationCodeSent) {
+      reset_password(phoneVerificationForm)
         .then(() => {
-          setCurrentStep({ no: 2, step: "Verify" });
-          setStatus({
+          setVerificationCodeSent(false);
+          setSubmitStatus({
             status: "",
             message: "",
           });
@@ -102,7 +53,7 @@ const PhoneVerification = ({
         .catch((error) => {
           const { status, data } = error.response;
           console.log(status, data);
-          setStatus({
+          setSubmitStatus({
             status: status,
             message: data.error,
           });
@@ -112,24 +63,33 @@ const PhoneVerification = ({
         phoneSubmitted: false,
       }));
     }
-  }, [PhoneEmailVerification, submitStatus, reset_password]);
+  }, [
+    submitStatus,
+    reset_password,
+    registerForm,
+    phoneVerification,
+    verificationCodeSent,
+  ]);
 
   useEffect(() => {
-    const { email, verification_code } = code;
-    if (email === "" || verification_code === "") return;
-    if (submitStatus.verifyCodeSubmitted) {
-      verify_code(code)
+    const { Email } = registerForm;
+    const verificationCodeForm = {
+      email: Email,
+      verification_code: verificationCode,
+    };
+    if (Email === "" || verificationCode === "") return;
+    if (verificationCodeStatus) {
+      verify_code(verificationCodeForm)
         .then(() => {
-          setCurrentStep({ no: 4, step: "Completed" });
-          setStatus({
+          setVerificationSuccessful(true);
+          setSubmitStatus({
             status: "",
             message: "",
           });
         })
         .catch((error) => {
           const { status, data } = error.response;
-          // console.log(status, data.message);
-          setStatus({
+          setSubmitStatus({
             status: status,
             message: data.message,
           });
@@ -139,66 +99,7 @@ const PhoneVerification = ({
         verifyCodeSubmitted: false,
       }));
     }
-  }, [code, submitStatus, verify_code]);
-
-  const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setPhoneEmailVerification((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }));
-  };
-  // const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { value } = e.target;
-  //   setCode((prevForm: CodeVerificationFormType) => ({
-  //     ...prevForm,
-  //     verification_code: value,
-  //   }));
-  // };
-
-  const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setCode(
-      (prevForm) =>
-        ({
-          ...prevForm,
-          verification_code: value,
-        } as CodeVerificationFormType)
-    );
-  };
-
-  const passwordRecoveryComplete = () => {
-    setPhoneVerification(false);
-    setSignUpChoice("Login");
-  };
-  const onSubmitPhone = (event: React.FormEvent) => {
-    // setCurrentStep({ no: 2, step: "Verify" });
-    event.preventDefault();
-    setSubmitStatus((prevForm) => ({
-      ...prevForm,
-      phoneSubmitted: true,
-    }));
-  };
-  const onSubmitCode = (event: React.FormEvent) => {
-    event.preventDefault();
-    // setCode((prevForm) => ({
-    //   ...prevForm,
-    //   email: PhoneEmailVerification.email,
-    // }));
-    setCode(
-      (prevForm) =>
-        ({
-          ...prevForm,
-          email: PhoneEmailVerification.email,
-        } as CodeVerificationFormType)
-    );
-
-    console.log("code submission before");
-    setSubmitStatus((prevForm) => ({
-      ...prevForm,
-      verifyCodeSubmitted: true,
-    }));
-  };
+  }, [verificationCodeStatus, registerForm, verificationCode, verify_code]);
 
   return (
     <div
@@ -208,7 +109,13 @@ const PhoneVerification = ({
     >
       <div className="w-full h-full relative">
         <div className="absolute top-0 right-0 group">
-          <button className="px-3 py-3" onClick={() => setDefault()}>
+          <button
+            className="px-3 py-3"
+            onClick={() => {
+              setShowLoading(false);
+              setSignUpChoice("Login");
+            }}
+          >
             <div className="group-hover:scale-110 group-hover:rotate-90 duration-300">
               <IoMdClose size={30} />
             </div>
@@ -232,67 +139,27 @@ const PhoneVerification = ({
           <span className="text-xl font-bold text-gray-400">
             Phone Verification
           </span>
-          <div className="w-[350px] h-[100px] flex justify-between items-center relative">
-            <div className="w-full h-[2px] absolute left-0 top-1/2 transform -translate-y-1/2 bg-slate-500">
-              <div
-                className={`h-full bg-black duration-300`}
-                style={{
-                  width: `${(currentStep.no - 1) * 100}%`,
-                }}
-              ></div>
-            </div>
-            {Steps.map((step, index) => (
-              <div
-                className="relative text-sm font-bold text-gray-400"
-                key={index}
-              >
-                <div>
-                  <div
-                    className={`w-[20px] h-[20px] rounded-full duration-300 ${
-                      index < currentStep.no ? "bg-slate-900" : "bg-slate-500"
-                    } `}
-                  ></div>
-                </div>
-                <span className="absolute -bottom-5 left-1/2 transform -translate-x-1/2">
-                  {step.step}
-                </span>
-              </div>
-            ))}
-          </div>
+
           <div className="w-full flex flex-row relative">
-            {currentStep.no === 1 && (
-              <div className="flex-shrink-0 w-full">
-                <Form
-                  submitStatus={status}
-                  formType="Send"
-                  onSubmit={onSubmitPhone}
-                  onChange={onChangePhone}
-                  formValues={PhoneEmailVerification}
-                  setPasswordRecovery={null}
-                />
-              </div>
-            )}
-            {currentStep.no === 2 && (
-              <div className="flex flex-col items-center w-full animate-slideAnimation">
-                <span className="w-[80%] text-center">
-                  Please enter the 6 digit code sent to this phone number
-                  ***-***-0607
-                </span>
-                <Form
-                  submitStatus={status}
-                  formType="Verify"
-                  onSubmit={onSubmitCode}
-                  onChange={onChangeCode}
-                  formValues={PhoneEmailVerification}
-                  setPasswordRecovery={null}
-                />
-              </div>
-            )}
+            <div className="flex flex-col items-center w-full animate-slideAnimation">
+              <span className="w-[80%] text-center">
+                Please enter the 6 digit code sent to this phone number
+                ***-***-0607
+              </span>
+              <Form
+                submitStatus={submitStatus}
+                formType="Verify"
+                onSubmit={onSubmitVerificationCode}
+                onChange={onChangeVerificationCode}
+                formValues={verificationCode}
+                setPasswordRecovery={null}
+              />
+            </div>
           </div>
-          {currentStep.step === "Completed" && phoneVerification && (
+          {verificationSuccessful && (
             <div className="w-full h-full absolute top-0 left-0 bg-[#1F2937] z-10 flex justify-center items-center text-center flex-col gap-3">
               <span className="font-bold">
-                Congratulations You have Successfully Registered
+                Congratulations You have Successfully updated you're password!
               </span>
               <div className="w-full h-[200px] flex justify-center">
                 <img
@@ -303,7 +170,7 @@ const PhoneVerification = ({
               </div>
               <button
                 className="px-5 py-3 font-bold border hover:bg-slate-700"
-                onClick={() => passwordRecoveryComplete()}
+                onClick={() => setPhoneVerification(false)}
               >
                 Login
               </button>

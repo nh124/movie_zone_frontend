@@ -26,7 +26,7 @@ const Forms = () => {
       {
         id: 1,
         name: "Code",
-        type: "text",
+        type: "number",
         placeholder: "000000",
         maxLength: 6,
       },

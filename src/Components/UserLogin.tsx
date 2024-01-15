@@ -166,6 +166,7 @@ const UserLogin = ({
             setPasswordRecovery={setPasswordRecovery}
           />
           <PhoneVerification
+            registerForm={registerForm}
             setSignUpChoice={setSignUpChoice}
             setShowLoading={setShowLoading}
             phoneVerification={phoneVerification}
@@ -195,7 +196,6 @@ const UserLogin = ({
           <div className="w-full h-fit flex flex-col items-center gap-3 overflow-hidden">
             <div className="w-full h-fit">
               <DualTab
-                setDefault={setDefault}
                 setTab={setSignUpChoice}
                 setStatus={setStatus}
                 currentValue={signUpChoice}
