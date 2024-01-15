@@ -17,7 +17,7 @@ const ImageEnlarge = ({
 }) => {
   const [index, setIndex] = useState(0);
   const [width, setWidth] = useState(0);
-
+  // console.log(width);
   const onClick = (type: string) => {
     if (index <= 0 && type === "backward") return;
     if (index >= SelectedImageArray.length - 1 && type === "forward") return;
@@ -37,9 +37,7 @@ const ImageEnlarge = ({
         SelectedImageArray[index]?.width > SelectedImageArray[index]?.height
       ) {
         setWidth(window.innerWidth * 0.65);
-        // console.log("setting 1");
       } else {
-        // console.log("setting 2");
         if (window.innerWidth <= 980) setWidth(window.innerWidth);
         if (window.innerWidth > 980 && window.innerWidth <= 1280)
           setWidth(window.innerWidth * 0.7);
@@ -57,7 +55,7 @@ const ImageEnlarge = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [window.innerWidth, SelectedImageArray]);
+  }, [SelectedImageArray, index]);
 
   console.log(width);
   return (
@@ -76,6 +74,7 @@ const ImageEnlarge = ({
         <button className="px-1 relative" onClick={() => onClick("backward")}>
           <MdOutlineArrowBackIos color="white" size={40} />
         </button>
+
         <div
           className="overflow-hidden animate-slideAnimation"
           style={{
