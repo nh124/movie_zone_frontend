@@ -16,7 +16,7 @@ const ImageEnlarge = ({
   setSelectedImageArray: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const [index, setIndex] = useState(0);
-  const [width, setWidth] = useState(0);
+  const [width, setWidth] = useState(500);
   // console.log(width);
   const onClick = (type: string) => {
     if (index <= 0 && type === "backward") return;
