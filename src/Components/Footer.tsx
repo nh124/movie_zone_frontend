@@ -22,7 +22,7 @@ const Footer = () => {
               window.location.reload();
             }}
           >
-            <div className="sm:w-[100px] w-[56px] px-3 py-3">
+            <div className="sm:w-[100px] w-[70px] px-3 py-3">
               <img
                 className="w-full h-full object-cover"
                 src={logo}
@@ -38,14 +38,14 @@ const Footer = () => {
               reach out.
             </span>
             <div className="flex fle-row gap-3">
-              <button className="px-2 py-2 border border-red-400 flex flex-row justify-start font-semibold items-center gap-2 text-gray-400 hover:scale-105 duration-300 rounded-full shadow-lg">
-                <MdBugReport size={40} color="red" />
+              <button className="w-fit h-fit py-2 px-2 border border-red-400 flex flex-row justify-start font-semibold items-center gap-2 text-gray-400 hover:scale-105 duration-300 rounded-full shadow-lg">
+                <MdBugReport size={30} color="red" />
               </button>
-              <button className="px-2 py-2 border border-blue-300 flex flex-row justify-start font-semibold items-center gap-2 hover:scale-105 duration-300 rounded-full">
-                <FcCollaboration size={40} />
+              <button className="w-fit h-fit px-2 py-2 border border-blue-300 flex flex-row justify-start font-semibold items-center gap-2 hover:scale-105 duration-300 rounded-full">
+                <FcCollaboration size={30} />
               </button>
-              <button className="px-2 py-2 border border-gray-400 flex flex-row justify-start font-semibold items-center gap-2 hover:scale-105 duration-300 rounded-full">
-                <FaGithub size={40} />
+              <button className="w-fit h-fit px-2 py-2 border border-gray-400 flex flex-row justify-start font-semibold items-center gap-2 hover:scale-105 duration-300 rounded-full">
+                <FaGithub size={30} />
               </button>
             </div>
           </div>
@@ -56,7 +56,7 @@ const Footer = () => {
             </span>
             <div className="flex fle-row gap-3">
               <button className="px-2 py-2 flex flex-row justify-start font-semibold items-center gap-2  text-gray-700 hover:scale-105 duration-300 rounded-full">
-                <img className="w-[200px]" src={tmdb} alt="" />
+                <img className="w-[150px] sm:w-[200px]" src={tmdb} alt="" />
               </button>
             </div>
           </div>
