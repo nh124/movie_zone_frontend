@@ -10,6 +10,8 @@ const Footer = () => {
   return (
     <div className="w-full h-fit bg-[#3f597e] relative py-[10%] px-[5%]">
       <div className="w-full h-[100%] bg-gradient-to-b from-[#283747] absolute top-0 z-10 left-0"></div>
+      <div className="w-[50%] h-[100%] bg-gradient-to-r from-[#283747] absolute top-0 z-10 left-0"></div>
+      <div className="w-[10%] h-[100%] bg-gradient-to-l from-[#283747] absolute top-0 z-10 right-0"></div>
       <div className="w-[60%] h-full absolute top-0 right-0 overflow-hidden">
         <img className="w-full h-full object-cover" src={avater} alt="" />
       </div>
