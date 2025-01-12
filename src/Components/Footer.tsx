@@ -5,8 +5,10 @@ import { MdBugReport } from "react-icons/md";
 import { FcCollaboration } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+
 const Footer = () => {
   const navigate = useNavigate();
+  // const [openFeedbackForm, setOpenFeedbackForm] = useState(false);
   return (
     <div className="w-full h-fit bg-[#3f597e] relative py-[10%] px-[5%]">
       <div className="w-full h-[100%] bg-gradient-to-b from-[#283747] absolute top-0 z-10 left-0"></div>

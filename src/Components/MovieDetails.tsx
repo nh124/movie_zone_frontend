@@ -2,9 +2,71 @@ import { useEffect, useState } from "react";
 import ParseMovieDetails from "../Rawfiles/ParseMovieDetails";
 import GetMovieDetails from "../API_PARSER/GetMovieDetails";
 import { IoArrowForwardOutline } from "react-icons/io5";
+import { IoMdClose } from "react-icons/io";
 import { FaFacebook, FaImdb, FaInstagram, FaTwitter } from "react-icons/fa";
 import { faImdb } from "@fortawesome/free-brands-svg-icons";
 import Gallery from "./Gallery";
+
+const CreditDetails = ({
+  credits,
+  setShowCastList,
+  setPersonDetails,
+  showFullCast,
+  setShowFullCast,
+}: {
+  credits: any;
+  setPersonDetails: any;
+  setShowCastList: any;
+  showFullCast: boolean;
+  setShowFullCast: any;
+}) => {
+  if (showFullCast) setShowCastList(true);
+  const closeFullCastView = () => {
+    setShowFullCast(false);
+    setShowCastList(false);
+  };
+  return (
+    <>
+      {showFullCast === true && (
+        <div className="text-gray-300 absolute top-0 left-0 w-[100%] h-screen bg-black/70 z-30 flex justify-center items-center">
+          <div className="w-fit h-1/2 px-3 py-3 bg-gradient-to-t from-[#2e4156] rounded-lg shadow-lg flex flex-col gap-3 border border-[#2e4156] relative">
+            <button
+              className="absolute top-[-15px] right-[-15px] p-2 rounded-full bg-[#2e4156] hover:scale-105 duration-300"
+              onClick={() => closeFullCastView()}
+            >
+              <IoMdClose size={20} color="#a4b5c9" />
+            </button>
+
+            <div className="flex flex-col overflow-y-auto h-fit gap-5 items-center px-2 py-4">
+              {credits.cast?.map((cast: any) => (
+                <button
+                  className="flex-shrink-0 flex w-[300px] h-[170px] bg-[#283747] rounded-md overflow-hidden shadow-md hover:scale-105 duration-300"
+                  key={cast?.id}
+                  onClick={() => {
+                    setPersonDetails(cast?.profileImage, cast?.id.toString());
+                    closeFullCastView();
+                  }}
+                >
+                  <div className="w-full h-full">
+                    <img
+                      src={cast?.profileImage}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="w-full h-full px-2 py-2 text-sm flex flex-col justify-center">
+                    <span className="font-bold">{cast?.name}</span>
+                    <span className="italic">{cast?.character}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 const MovieDetails = ({
   movieId,
   socials,
@@ -12,15 +74,18 @@ const MovieDetails = ({
   setSelectedPersonID,
   setShowPeopleDetails,
   setSelectedImageArray,
+  setShowCastList,
 }: {
   movieId: string | undefined;
   socials: any;
   setSelectedImageURL: React.Dispatch<React.SetStateAction<string>>;
   setSelectedPersonID: React.Dispatch<React.SetStateAction<string>>;
   setShowPeopleDetails: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowCastList: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedImageArray: any;
 }) => {
   const [expandReadMore, setExpandReadMore] = useState(true);
+  const [showFullCast, setShowFullCast] = useState(false);
   const [details, setDetails] = useState({
     originalTitle: "",
     title: "",
@@ -69,6 +134,13 @@ const MovieDetails = ({
   const imageTypes = ["Backdrops", "Posters"];
   return (
     <div className="w-full h-auto flex flex-col md:flex-row gap-3">
+      <CreditDetails
+        credits={credits}
+        setPersonDetails={setPersonDetails}
+        setShowCastList={setShowCastList}
+        showFullCast={showFullCast}
+        setShowFullCast={setShowFullCast}
+      />
       <div className="md:w-[70%] w-full flex flex-col gap-3 pl-[4%]">
         <div className=" flex text-gray-300">
           <div
@@ -125,7 +197,10 @@ const MovieDetails = ({
                   </div>
                 </button>
               ))}
-              <button className="font-semibold flex flex-col items-center w-fit">
+              <button
+                className="font-semibold flex flex-col items-center w-fit"
+                onClick={() => setShowFullCast(true)}
+              >
                 <div>
                   <IoArrowForwardOutline size={30} />
                 </div>
@@ -215,7 +290,9 @@ const MovieDetails = ({
         </div>
         <div className="flex flex-col">
           <span className="font-semibold text-gray-400 text-lg">Revenue</span>
-          <span className="text-base text-gray-400">{details?.revenue}</span>
+          <span className="text-base text-gray-400">
+            ${details?.revenue.toLocaleString()}
+          </span>
         </div>
         <div className="flex flex-col">
           <span className="font-semibold text-gray-400 text-lg">

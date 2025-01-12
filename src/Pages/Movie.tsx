@@ -48,6 +48,7 @@ const Movie = () => {
   const dispatch = useDispatch();
   const [selectedPersonID, setSelectedPersonID] = useState("");
   const [showPeopleDetails, setShowPeopleDetails] = useState(false);
+  const [showCastList, setShowCastList] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState("");
   const [SelectedImageArray, setSelectedImageArray] = useState([]);
   const [showImages, setShowImages] = useState(false);
@@ -99,7 +100,9 @@ const Movie = () => {
   return (
     <div
       className={`w-full relative ${
-        showPeopleDetails || playTrailers || showImages ? "h-screen" : "h-fit"
+        showPeopleDetails || playTrailers || showImages || showCastList
+          ? "h-screen"
+          : "h-fit"
       } overflow-hidden`}
     >
       <ImageEnlarge
@@ -141,6 +144,7 @@ const Movie = () => {
           movieId={movieId}
           socials={socials}
           setSelectedPersonID={setSelectedPersonID}
+          setShowCastList={setShowCastList}
           setSelectedImageURL={setSelectedImageURL}
           setShowPeopleDetails={setShowPeopleDetails}
           setSelectedImageArray={setSelectedImageArray}

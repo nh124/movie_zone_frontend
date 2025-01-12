@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import logo from "../assets/logo.png";
-import Form from "./Form";
+import Form from "./Forms/Form";
 import DualTab from "./DualTab";
 import PasswordRecovery from "./PasswordRecovery";
 import UserManager from "../API/UserSignUp";

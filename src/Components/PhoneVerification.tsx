@@ -1,6 +1,6 @@
 import { IoMdClose } from "react-icons/io";
 import logo from "../assets/logo.png";
-import Form from "./Form";
+import Form from "./Forms/Form";
 import { useEffect, useState } from "react";
 import UserManager from "../API/UserSignUp";
 import checkLogo from "../assets/Eo_circle_green_checkmark.svg.png";

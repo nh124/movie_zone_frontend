@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import formDictionary from "../Rawfiles/Forms";
+import formDictionary from "../../Rawfiles/Forms";
+import TextInput from "../Inputs/TextInput";
 type status = {
   status: string;
   message: string;
@@ -69,23 +70,19 @@ const Form = ({
         )}
 
         {currentForm.map((form) => {
-          const { name, placeholder, type } = form;
-          return (
-            <div className="flex flex-col" key={form.id}>
-              <label htmlFor={name}>{name}</label>
-              <input
+          const { type } = form;
+          if (type === "any") return null;
+          else {
+            return (
+              <TextInput
+                form={form}
+                formValues={formValues}
                 onChange={onChange}
-                type={type}
-                name={name}
-                value={formValues[name.toLowerCase()]} // Use dynamic property access
-                id={name}
-                maxLength={form?.maxLength}
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:outline-none"
-                placeholder={placeholder}
-                required
+                key={form.id}
+                password={form.type === "password"}
               />
-            </div>
-          );
+            );
+          }
         })}
         <div className="w-full h-auto py-4 flex justify-center">
           <input

@@ -22,6 +22,10 @@ export default {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0%)" },
         },
+        slideUpAnimation: {
+          "0%": { transform: "translateY(0%)" },
+          "100%": { transform: "translateY(100%)" },
+        },
         nodeSlide: {
           "0%": { transform: "translateX(-15px)" },
           "50%": { transform: "translateX(30px)" },
@@ -57,6 +61,7 @@ export default {
         nodeSlideAnimation: "nodeSlide 1s ease-in-out infinite",
         nodeSlideUpAnimation: "nodeSlideUp 1s ease-in-out infinite",
         nodeSlideDownAnimation: "nodeSlideDown 1s ease-in-out infinite",
+        slideUpAnimation: "slideUpAnimation 1s ease-in-out",
       },
       extend: {
         transitionProperty: {

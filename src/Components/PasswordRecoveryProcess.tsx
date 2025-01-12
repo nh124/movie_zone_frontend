@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Form from "./Form";
+import Form from "./Forms/Form";
 
 const PasswordRecoveryProcess = ({
   name,
