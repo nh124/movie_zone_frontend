@@ -291,7 +291,7 @@ const MovieDetails = ({
         <div className="flex flex-col">
           <span className="font-semibold text-gray-400 text-lg">Revenue</span>
           <span className="text-base text-gray-400">
-            ${details?.revenue.toLocaleString()}
+            ${details?.revenue?.toLocaleString()}
           </span>
         </div>
         <div className="flex flex-col">
