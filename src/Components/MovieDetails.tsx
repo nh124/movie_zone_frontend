@@ -27,20 +27,20 @@ const CreditDetails = ({
   };
   return (
     <>
-      {showFullCast === true && (
+      {showFullCast && (
         <div className="text-gray-300 absolute top-0 left-0 w-[100%] h-screen bg-black/70 z-30 flex justify-center items-center">
-          <div className="w-fit h-1/2 px-3 py-3 bg-gradient-to-t from-[#2e4156] rounded-lg shadow-lg flex flex-col gap-3 border border-[#2e4156] relative">
+          <div className="md:w-fit md:h-1/2 px-3 py-3 bg-[#2e4156]/60 rounded-lg shadow-lg flex flex-col gap-3 md:border border-[#2e4156] relative w-full h-screen items-end">
             <button
-              className="absolute top-[-15px] right-[-15px] p-2 rounded-full bg-[#2e4156] hover:scale-105 duration-300"
+              className="top-[-15px] right-[-15px] p-2 rounded-full bg-[#2e4156] hover:scale-105 duration-300 md:absolute w-fit"
               onClick={() => closeFullCastView()}
             >
               <IoMdClose size={20} color="#a4b5c9" />
             </button>
 
-            <div className="flex flex-col overflow-y-auto h-fit gap-5 items-center px-2 py-4">
+            <div className="flex flex-col overflow-y-auto h-fit gap-5 items-center px-2 py-4 w-full">
               {credits.cast?.map((cast: any) => (
                 <button
-                  className="flex-shrink-0 flex w-[300px] h-[170px] bg-[#283747] rounded-md overflow-hidden shadow-md hover:scale-105 duration-300"
+                  className="flex-shrink-0 flex md:w-[300px] w-full md:h-[170px] h-[250px] bg-[#283747] rounded-md overflow-hidden shadow-md hover:scale-105 duration-300"
                   key={cast?.id}
                   onClick={() => {
                     setPersonDetails(cast?.profileImage, cast?.id.toString());
