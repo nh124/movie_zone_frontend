@@ -52,7 +52,6 @@ const SidePanelHome = () => {
       // Start the interval and store its ID
       const id = setInterval(() => {
         setTextOffset((prev) => prev + 10);
-        console.log(textOffset);
       }, 5);
 
       // Store the interval ID in state
@@ -77,8 +76,7 @@ const SidePanelHome = () => {
     const promises = moviesIds.map((element) => {
       return getMovieDetails(element, "details")
         .then((response) => response)
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           return null; // Handle the error, e.g., by returning null
         });
     });
@@ -87,7 +85,6 @@ const SidePanelHome = () => {
     Promise.all(promises).then((responses) => {
       // Filter out null responses (errors)
       const validResponses = responses.filter((response) => response !== null);
-      console.log(validResponses);
 
       // Update the state with valid responses
       setFavoriteMovies(validResponses);
@@ -121,14 +118,9 @@ const SidePanelHome = () => {
         setGetUserLists(false);
         setConvertToJson(true);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(() => {});
   }, [getUserLists, getUserListsStatus, storedToken]);
-  console.log(overFlow);
-  useEffect(() => {
-    console.log(favoriteMovies);
-  }, [favoriteMovies]);
+
   return (
     <div className="w-full sm:w-[40%] h-[400px] md:h-[800px]">
       <div className="w-full h-full px-3 py-3">

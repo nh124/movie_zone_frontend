@@ -14,13 +14,11 @@ const DeleteComment = ({
 
   const onClick = () => {
     deleteComment(commentId, storedToken)
-      .then((response) => {
+      .then(() => {
         setGetCommentsStatus(true);
-        console.log(response);
       })
-      .catch((error) => {
+      .catch(() => {
         setGetCommentsStatus(true);
-        console.log(error);
       });
   };
   return (

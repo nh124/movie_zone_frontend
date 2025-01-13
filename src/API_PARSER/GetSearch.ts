@@ -13,10 +13,9 @@ const GetSearch = () => {
     searchMovie(SearchMoviePageIndex, SearchMovie)
       .then((response) => {
         setSearchResult(response.results);
-        console.log(response);
       })
       .catch((error) => {
-        console.log(error);
+        throw error;
       });
   };
   useEffect(() => {

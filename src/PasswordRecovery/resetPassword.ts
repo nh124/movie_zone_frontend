@@ -12,17 +12,13 @@ const ResetPassword = (
   const { reset_password } = UserManager();
 
   const resetPassword = () => {
-    reset_password(PhoneEmailVerificationForm)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        const { status, data } = error.response;
-        setStatus({
-          states: status,
-          message: data.error,
-        });
+    reset_password(PhoneEmailVerificationForm).catch((error) => {
+      const { status, data } = error.response;
+      setStatus({
+        states: status,
+        message: data.error,
       });
+    });
   };
   useEffect(() => {
     resetPassword();

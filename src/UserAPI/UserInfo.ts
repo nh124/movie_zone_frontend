@@ -15,7 +15,6 @@ const UserInfo = (token: string | undefined) => {
         setError({
           error: error?.name,
         });
-        console.log(error);
       });
   };
   useEffect(() => {

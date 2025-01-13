@@ -57,7 +57,6 @@ const ImageEnlarge = ({
     };
   }, [SelectedImageArray, index]);
 
-  console.log(width);
   return (
     <div
       className={`w-full h-[100vh] bg-[#283747]  top-0 left-0 animate-fadeAnimation z-30 flex justify-center items-center ${

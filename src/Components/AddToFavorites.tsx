@@ -28,10 +28,7 @@ const AddToFavorites = ({
   const [deleteUserListStatus, setDeteleUserListStatus] = useState(false);
   const { AddToUserList, GetUserList, updateUserList, deleteFromUserList } =
     UserListManager();
-
-  console.log(userList);
   useEffect(() => {
-    console.log(userListStatus);
     if (
       storedToken === undefined ||
       storedToken === null ||
@@ -41,12 +38,10 @@ const AddToFavorites = ({
       return;
     GetUserList(storedToken)
       .then((response) => {
-        console.log(response);
         setUserList(response?.message);
         setUserListStatus(false);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         setUserListStatus(false);
       });
   }, [GetUserList, storedToken, userListStatus]);
@@ -59,13 +54,11 @@ const AddToFavorites = ({
       return;
 
     AddToUserList(favorites, storedToken)
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         setFavoritesStatus(false);
         setUserListStatus(true);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         setFavoritesStatus(false);
       });
   }, [favorites, AddToUserList, storedToken, favoritesStatus, userList]);
@@ -75,15 +68,12 @@ const AddToFavorites = ({
       return;
 
     if (updateUserListStatus) {
-      // console.log("updateUserListStatus");
       updateUserList(favorites, storedToken)
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           setUpdateUserListStatus(false);
           setUserListStatus(true);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
           setUpdateUserListStatus(false);
         });
     }
@@ -94,22 +84,18 @@ const AddToFavorites = ({
       return;
 
     if (deleteUserListStatus) {
-      console.log(favorites);
       deleteFromUserList(favorites, storedToken)
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           setDeteleUserListStatus(false);
           setUserListStatus(true);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
           setDeteleUserListStatus(false);
         });
     }
   }, [deleteFromUserList, deleteUserListStatus, storedToken, favorites]);
 
   const AddMovies = () => {
-    console.log(userList);
     if (storedToken === undefined) {
       dispatch(setNotificationStatus(true));
     }

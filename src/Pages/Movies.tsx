@@ -60,15 +60,12 @@ const Movies = () => {
     if (!pageInc) return;
     getDiscover(pageIndex, filters)
       .then((response: responseType) => {
-        console.log(response);
         const filteredMovies = filterMovies(response.results);
         setDiscoverMovies((prev) => [...prev, ...filteredMovies]);
         setTotalPages(response?.total_pages);
         setPageInc(false);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(() => {});
   }, [pageIndex, filters, getDiscover, pageInc]);
 
   useEffect(() => {

@@ -12,7 +12,7 @@ const GetMovieDetails = (movieID: string | undefined, type: string) => {
         setMovieDetails(response);
       })
       .catch((error) => {
-        console.log(error);
+        throw error;
       });
   };
 

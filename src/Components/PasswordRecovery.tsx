@@ -110,7 +110,7 @@ const PasswordRecovery = ({
         })
         .catch((error) => {
           const { status, data } = error.response;
-          console.log(status, data);
+
           setStatus({
             status: status,
             message: data.error,
@@ -252,7 +252,6 @@ const PasswordRecovery = ({
         } as CodeVerificationFormType)
     );
 
-    console.log("code submission before");
     setSubmitStatus((prevForm) => ({
       ...prevForm,
       verifyCodeSubmitted: true,

@@ -35,7 +35,6 @@ const UpdatePage = ({ currentPage }: { currentPage: string }) => {
       dispatch(setEnd(end + length));
 
       if (currentPage === "Home") {
-        console.log("Incrementing indexes");
         if (currentList === "Trending")
           dispatch(IncrementTrendingMoviePageIndex());
         if (currentList === "Upcoming")

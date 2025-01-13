@@ -52,7 +52,7 @@ const PhoneVerification = ({
         })
         .catch((error) => {
           const { status, data } = error.response;
-          console.log(status, data);
+
           setSubmitStatus({
             status: status,
             message: data.error,

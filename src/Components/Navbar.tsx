@@ -43,12 +43,8 @@ const Navbar = ({
       token: storedToken,
     };
     setExpiredToken(storedToken, tokenForm)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      .then(() => {})
+      .catch(() => {});
     navigate("/");
     window.location.reload();
     localStorage.removeItem("token");

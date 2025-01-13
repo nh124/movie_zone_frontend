@@ -37,7 +37,6 @@ const UserLogin = ({
   });
 
   const exitLogin = (token: string) => {
-    console.log(token);
     const tokenString = JSON.stringify(token);
     localStorage.setItem("token", tokenString);
     setShowLoading(false);
@@ -107,16 +106,12 @@ const UserLogin = ({
   };
   const onSubmitLogin = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(loginForm);
+
     setSubmitStatus((prevForm) => ({
       ...prevForm,
       loginFormSubmitted: true,
     }));
   };
-
-  useEffect(() => {
-    console.log(loginForm);
-  }, [loginForm]);
 
   useEffect(() => {
     setLoginForm({

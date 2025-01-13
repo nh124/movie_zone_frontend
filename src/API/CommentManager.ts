@@ -76,6 +76,7 @@ const CommentManager = () => {
     try {
       const response = await axios.put(
         import.meta.env.VITE_SERVER_URL + `/updateLike/${commentId}`,
+        {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -93,6 +94,7 @@ const CommentManager = () => {
     try {
       const response = await axios.put(
         import.meta.env.VITE_SERVER_URL + `/updateDisLike/${commentId}`,
+        {},
         {
           headers: {
             "Content-Type": "application/json",

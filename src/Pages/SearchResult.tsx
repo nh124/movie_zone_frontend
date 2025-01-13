@@ -27,7 +27,6 @@ const SearchResult = () => {
     const filterMovies = RemoveDuplicatesFilter(searchedResult);
     // console.log(filterMovies);
     setFinalSearchedResult(filterMovies);
-    console.log(searchedResult);
   }, [searchedResult]);
 
   useEffect(() => {
@@ -44,9 +43,7 @@ const SearchResult = () => {
         ]);
         setSearchStatus(false);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(() => {});
   }, [currentPage, searchMovie, searchedMovie, searchStatus]);
 
   useEffect(() => {

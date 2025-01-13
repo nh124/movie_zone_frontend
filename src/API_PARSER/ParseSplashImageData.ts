@@ -202,7 +202,6 @@ const ParseSplashImageData = () => {
   useEffect(() => {
     getGenreList()
       .then((response: genreResponseType) => {
-        console.log(response);
         const init_genreDict: GenreType = {};
         response.genres.forEach((genre) => {
           init_genreDict[genre.id] = genre.name;
@@ -217,7 +216,6 @@ const ParseSplashImageData = () => {
   useEffect(() => {
     getLatestMovies()
       .then((response: responseType) => {
-        console.log(response);
         const mappedResult = response.results
           .filter((result) => result.backdrop_path !== null)
           .filter((result) => result.overview !== null)

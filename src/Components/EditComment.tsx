@@ -37,7 +37,6 @@ const EditComment = ({
     setUpdatedComment({
       comment: e.target.value,
     });
-    console.log(e.target.value);
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -50,17 +49,14 @@ const EditComment = ({
       return;
     event.preventDefault();
     editComment(commentId, storedToken, updatedComment)
-      .then((response) => {
+      .then(() => {
         setGetCommentsStatus(true);
         setUpdateCommentStatus({
           id: 0,
           status: false,
         });
-        console.log(response);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(() => {});
   };
   return (
     <div

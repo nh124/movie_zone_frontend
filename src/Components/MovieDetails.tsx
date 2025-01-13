@@ -70,7 +70,6 @@ const CreditDetails = ({
 const MovieDetails = ({
   movieId,
   socials,
-  setSelectedImageURL,
   setSelectedPersonID,
   setShowPeopleDetails,
   setSelectedImageArray,
@@ -78,7 +77,6 @@ const MovieDetails = ({
 }: {
   movieId: string | undefined;
   socials: any;
-  setSelectedImageURL: React.Dispatch<React.SetStateAction<string>>;
   setSelectedPersonID: React.Dispatch<React.SetStateAction<string>>;
   setShowPeopleDetails: React.Dispatch<React.SetStateAction<boolean>>;
   setShowCastList: React.Dispatch<React.SetStateAction<boolean>>;
@@ -126,8 +124,7 @@ const MovieDetails = ({
     setImages(parsedImages);
   }, [query_details, query_credits, query_images]);
 
-  const setPersonDetails = (imageURL: string, personID: string) => {
-    setSelectedImageURL(imageURL);
+  const setPersonDetails = (personID: string) => {
     setSelectedPersonID(personID);
     setShowPeopleDetails(true);
   };
@@ -180,9 +177,7 @@ const MovieDetails = ({
                 <button
                   className="flex-shrink-0 w-[120px] h-[170px] bg-[#283747] rounded-md overflow-hidden shadow-md hover:scale-105 duration-300"
                   key={cast?.id}
-                  onClick={() =>
-                    setPersonDetails(cast?.profileImage, cast?.id.toString())
-                  }
+                  onClick={() => setPersonDetails(cast?.id.toString())}
                 >
                   <div className="w-full h-[70%]">
                     <img

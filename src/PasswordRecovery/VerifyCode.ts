@@ -8,17 +8,13 @@ const VerifyCode = (CodeVerificationForm: CodeVerificationFormType) => {
   const { verify_code } = UserManager();
 
   const verifyCode = () => {
-    verify_code(CodeVerificationForm)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        const { status, data } = error.response;
-        setStatus({
-          states: status,
-          message: data.error,
-        });
+    verify_code(CodeVerificationForm).catch((error) => {
+      const { status, data } = error.response;
+      setStatus({
+        states: status,
+        message: data.error,
       });
+    });
   };
 
   useEffect(() => {

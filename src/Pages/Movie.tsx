@@ -49,7 +49,6 @@ const Movie = () => {
   const [selectedPersonID, setSelectedPersonID] = useState("");
   const [showPeopleDetails, setShowPeopleDetails] = useState(false);
   const [showCastList, setShowCastList] = useState(false);
-  const [selectedImageURL, setSelectedImageURL] = useState("");
   const [SelectedImageArray, setSelectedImageArray] = useState([]);
   const [showImages, setShowImages] = useState(false);
 
@@ -67,7 +66,6 @@ const Movie = () => {
 
   useEffect(() => {
     const parsedVideo = ParseMovieDetails(query_videos, "videos");
-    console.log(video);
     setVideo(parsedVideo);
     setSocials(query_socials);
     dispatch(setTab("Trending"));
@@ -130,13 +128,10 @@ const Movie = () => {
 
         <VideoPlayers />
         <MoreDetailsCard
-          type="Person"
           personID={parseInt(selectedPersonID, 10)}
-          imageURL={selectedImageURL}
           showPeopleDetails={showPeopleDetails}
           setShowPeopleDetails={setShowPeopleDetails}
           setSelectedPersonID={setSelectedPersonID}
-          setSelectedImageURL={setSelectedImageURL}
         />
         <UserLogin showLogin={showLogin} setShowLoading={setShowLoading} />
         <SplashScreen movieId={movie_id} setPlayTrailers={setPlayTrailers} />
@@ -145,7 +140,6 @@ const Movie = () => {
           socials={socials}
           setSelectedPersonID={setSelectedPersonID}
           setShowCastList={setShowCastList}
-          setSelectedImageURL={setSelectedImageURL}
           setShowPeopleDetails={setShowPeopleDetails}
           setSelectedImageArray={setSelectedImageArray}
         />

@@ -3,21 +3,15 @@ import MovieManager from "../API/MovieManager";
 import DateConverter from "../Rawfiles/DateConverter";
 import { IoMdClose } from "react-icons/io";
 const MoreDetailsCard = ({
-  type,
-  imageURL,
   personID,
   setShowPeopleDetails,
   showPeopleDetails,
   setSelectedPersonID,
-  setSelectedImageURL,
 }: {
-  type: string;
-  imageURL: string;
   personID: number;
   setShowPeopleDetails: React.Dispatch<React.SetStateAction<boolean>>;
   showPeopleDetails: boolean;
   setSelectedPersonID: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedImageURL: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   type creditContributionType = {
     adult: boolean;
@@ -58,7 +52,6 @@ const MoreDetailsCard = ({
     crew: Array<creditContributionType>;
   };
 
-  console.log(type, imageURL);
   const { getPeopleDetails } = MovieManager();
   const [personDetails, setPersonDetails] = useState<PeopleDetailsType | null>(
     null
@@ -89,13 +82,10 @@ const MoreDetailsCard = ({
     if (!personID) return;
     getPeopleDetails("details", personID)
       .then((response) => {
-        console.log(response);
         setPersonDetails(response);
         setPersonDetailsStatus(false);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(() => {});
   }, [getPeopleDetails, personID, getPersonDetailsStatus]);
 
   useEffect(() => {
@@ -103,20 +93,15 @@ const MoreDetailsCard = ({
     if (!personID) return;
     getPeopleDetails("credit", personID)
       .then((response: responseType) => {
-        // console.log(response);
         const topCredits = sortCreditBasedOnScore(response?.cast);
-        // console.log(topCredits);
         setPeopleCredit(topCredits);
         setPersonDetailsStatus(false);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(() => {});
   }, [getPeopleDetails, personID, getPersonDetailsStatus]);
 
   const clearData = () => {
     setSelectedPersonID("");
-    setSelectedImageURL("");
     setShowPeopleDetails(false);
   };
 

@@ -9,6 +9,7 @@ import DeleteComment from "./DeleteComment";
 import { setNotificationStatus } from "../Redux/NotificationReducer";
 import { useDispatch } from "react-redux";
 import { FormEvent } from "react";
+import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 
 const MovieComments = ({ movieId }: { movieId: number }) => {
   const { get_user, setExpiredToken } = UserInformationManager();
@@ -49,7 +50,15 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
     movieId: 0;
     name: "";
   };
+  type commentsEngagementType = {
+    id: 0;
+    disLike: 0;
+    like: 0;
+  };
   const [comments, setComments] = useState<commentsType[]>([]);
+  const [commentEngagements, setCommentEngagements] = useState<
+    commentsEngagementType[]
+  >([]);
   const [textareaHeight, setTextareaHeight] = useState("50px");
   const [text, setText] = useState({ movieId: 0, comment: "" });
   const [sendCommentStatus, setSendCommentStatus] = useState(false);
@@ -60,7 +69,8 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
     id: 0,
     status: false,
   });
-  const { addComment, getComment } = CommentManager();
+  const { addComment, getComment, updateLike, updateDisLike } =
+    CommentManager();
   const getTime = (time: string) => {
     const currentTime = new Date();
     const newTime = new Date(time);
@@ -82,7 +92,6 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
   const commentsContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log(commentsContainerRef.current);
     const handleClickOutside = (event: MouseEvent) => {
       const containerRef = commentsContainerRef.current;
       if (
@@ -102,20 +111,48 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
     };
   }, [expandComments]);
 
+  const updateCommentEngagement = (
+    engagementType: "like" | "disLike",
+    commentId: number
+  ) => {
+    if (!storedToken) return;
+    // Update the backend
+    if (engagementType === "like") {
+      updateLike(commentId, storedToken);
+    } else if (engagementType === "disLike") {
+      updateDisLike(commentId, storedToken);
+    }
+    setCommentEngagements((prevEngagements) =>
+      prevEngagements.map((engagement) =>
+        engagement.id === commentId
+          ? {
+              ...engagement,
+              [engagementType]: engagement[engagementType] + 1,
+            }
+          : engagement
+      )
+    );
+  };
   useEffect(() => {
     setGetCommentsStatus(true);
   }, []);
-
   useEffect(() => {
     if (getCommentsStatus === false) return;
     getComment(movieId)
       .then((response) => {
         const comments = response.comments;
         setComments(comments);
+        const commentEngagement = comments
+          .map((comment: any) => ({
+            id: comment.id,
+            like: comment.like,
+            disLike: comment.dislike,
+          }))
+          .reverse();
+        setCommentEngagements(commentEngagement);
         setGetCommentsStatus(false);
       })
       .catch(() => {
-        // console.log(error);
         setGetCommentsStatus(false);
       });
   }, [getComment, movieId, getCommentsStatus]);
@@ -130,8 +167,7 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
         setGetCommentsStatus(true);
         setSendCommentStatus(false);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         setSendCommentStatus(false);
       });
   }, [addComment, sendCommentStatus, text, storedToken]);
@@ -166,7 +202,6 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
       comment: e.target.value,
     });
   };
-
   return (
     <div className="w-full sm:w-full min-h-[200px] h-auto sm:pl-[4%] sm:pr-3 py-6 ">
       <div className="w-full sm:w-[90%] sm:px-3 px-1 py-1 flex flex-col gap-3">
@@ -219,78 +254,85 @@ const MovieComments = ({ movieId }: { movieId: number }) => {
               {comments
                 ?.slice()
                 ?.reverse()
-                ?.map((comment, index) => (
-                  <div
-                    className="flex flex-row relative w-full h-fit gap-4 shadow-lg py-3"
-                    key={comment?.id}
-                  >
-                    <div className="w-[50px] h-[50px] flex justify-center items-center rounded-lg bg-slate-800">
-                      <IoPersonSharp size={30} color="gray" />
-                    </div>
-
-                    <div className="flex flex-col h-fit w-full gap-2 relative">
-                      <EditCommentFunc
-                        setGetCommentsStatus={setGetCommentsStatus}
-                        storedToken={storedToken}
-                        commentId={comment?.id}
-                        updateCommentStatus={updateCommentStatus}
-                        index={index}
-                        setUpdateCommentStatus={setUpdateCommentStatus}
-                      />
-                      <div className="w-full flex flex-row justify-between items-center">
-                        <div className="w-fit h-[50px] flex justify-center flex-col">
-                          <button className="font-bold text-gray-300 text-lg w-fit">
-                            {comment?.name}
-                          </button>
-                          <span>{getTime(comment?.date)}</span>
-                        </div>
-                        <div className="flex flex-row gap-3 px-3">
-                          {comment?.name === user?.name && (
-                            <button
-                              className="hover:scale-110 duration-300"
-                              onClick={() =>
-                                setUpdateCommentStatus({
-                                  id: index,
-                                  status: true,
-                                })
-                              }
-                            >
-                              <AiFillEdit size={25} />
+                ?.map((comment, index) => {
+                  const engagement = commentEngagements.find(
+                    (engagement) => engagement.id === comment.id
+                  );
+                  return (
+                    <div
+                      className="flex flex-row relative w-full h-fit gap-4 shadow-lg py-3"
+                      key={comment?.id}
+                    >
+                      <div className="w-[50px] h-[50px] flex justify-center items-center rounded-lg bg-slate-800">
+                        <IoPersonSharp size={30} color="gray" />
+                      </div>
+                      <div className="flex flex-col h-fit w-full gap-2 relative">
+                        <EditCommentFunc
+                          setGetCommentsStatus={setGetCommentsStatus}
+                          storedToken={storedToken}
+                          commentId={comment?.id}
+                          updateCommentStatus={updateCommentStatus}
+                          index={index}
+                          setUpdateCommentStatus={setUpdateCommentStatus}
+                        />
+                        <div className="w-full flex flex-row justify-between items-center">
+                          <div className="w-fit h-[50px] flex justify-center flex-col">
+                            <button className="font-bold text-gray-300 text-lg w-fit">
+                              {comment?.name}
                             </button>
-                          )}
-                          {comment?.name === user?.name && (
-                            <DeleteComment
-                              commentId={comment?.id}
-                              storedToken={storedToken}
-                              setGetCommentsStatus={setGetCommentsStatus}
-                            />
-                          )}
+                            <span>{getTime(comment?.date)}</span>
+                          </div>
+                          <div className="flex flex-row gap-3 px-3">
+                            {comment?.name === user?.name && (
+                              <button
+                                className="hover:scale-110 duration-300"
+                                onClick={() =>
+                                  setUpdateCommentStatus({
+                                    id: index,
+                                    status: true,
+                                  })
+                                }
+                              >
+                                <AiFillEdit size={25} />
+                              </button>
+                            )}
+                            {comment?.name === user?.name && (
+                              <DeleteComment
+                                commentId={comment?.id}
+                                storedToken={storedToken}
+                                setGetCommentsStatus={setGetCommentsStatus}
+                              />
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="w-full h-auto flex items-center py-1">
+                          <span className="">{comment?.comment}</span>
                         </div>
                       </div>
-
-                      <div className="w-full h-auto flex items-center py-1">
-                        <span className="">{comment?.comment}</span>
-                      </div>
+                      <div className="w-fit h-auto absolute -bottom-7 -right-3 flex justify-end px-3 py-2 gap-4 rounded-md bg-slate-800 text-sm">
+                        <button
+                          className="hover:scale-110 duration-300 shadow-lg flex flex-row gap-2"
+                          onClick={() =>
+                            updateCommentEngagement("like", comment?.id)
+                          }
+                        >
+                          <FaThumbsUp size={20} color="gray" />
+                          {engagement?.like}
+                        </button>
+                        <button
+                          className="hover:scale-110 duration-300 shadow-lg flex flex-row gap-2"
+                          onClick={() =>
+                            updateCommentEngagement("disLike", comment?.id)
+                          }
+                        >
+                          <FaThumbsDown size={20} color="gray" />
+                          {engagement?.disLike}
+                        </button>
+                      </div>{" "}
                     </div>
-
-                    {/* <div className="w-fit h-auto absolute -bottom-7 -right-3 flex justify-end px-3 py-2 gap-4 rounded-md bg-slate-800 text-sm">
-                  <button
-                    className="hover:scale-110 duration-300 shadow-lg flex flex-row gap-2"
-                    onClick={() => UpdateLike(comment?.id)}
-                  >
-                    <FaThumbsUp size={20} color="gray" />
-                    {comment?.like}
-                  </button>
-                  <button
-                    className="hover:scale-110 duration-300 shadow-lg flex flex-row gap-2"
-                    onClick={() => UpdateDisLike(comment?.id)}
-                  >
-                    <FaThumbsDown size={20} color="gray" />
-                    {comment?.dislike}
-                  </button>
-                </div> */}
-                  </div>
-                ))}
+                  );
+                })}
               <button
                 className={`w-full h-[100px] bottom-0 left-0 bg-gradient-to-b to-[#283747]/90 from-[#2E4056]/90 flex justify-center items-end py-4 ${
                   expandComments ? "hidden" : "absolute"

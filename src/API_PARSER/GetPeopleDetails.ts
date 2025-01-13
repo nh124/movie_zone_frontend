@@ -11,7 +11,7 @@ const GetPeopleDetails = (type: string, personID: number) => {
         setMovieDetails(response);
       })
       .catch((error) => {
-        console.log(error);
+        throw error;
       });
   };
 
