@@ -18,7 +18,7 @@ const Home = () => {
       <UserLogin showLogin={showLogin} setShowLoading={setShowLoading} />
       <SplashImage />
       <GridResize />
-      <div className="w-full md:w-[70%] h-fit flex sm:flex-row justify-between px-1 sm:px-4 text-white sm:py-5 py-1 flex-col gap-3">
+      <div className="w-full h-fit flex sm:flex-row justify-between px-1 sm:px-4 text-white sm:py-5 py-1 flex-col gap-3">
         <span className="text-base sm:text-lg">Recently Updated</span>
         <div className="flex flex-col sm:flex-row gap-2 justify-between">
           <MovieTab />
