@@ -102,10 +102,10 @@ const SplashScreen = ({
           <div className="flex justify-center items-center font-bold">
             <span>User Score</span>
           </div>
-          <div className="flex flex-row justify-center items-center gap-3">
-            {/* <AddToBookmark storedToken={storedToken} movieId={movieId} /> */}
-            <AddToFavorites storedToken={storedToken} movieId={movieId} />
-          </div>
+          {/* <div className="flex flex-row justify-center items-center gap-3"> */}
+          {/* <AddToBookmark storedToken={storedToken} movieId={movieId} /> */}
+          {/* <AddToFavorites storedToken={storedToken} movieId={movieId} /> */}
+          {/* </div> */}
         </div>
         <button
           className="w-fit px-3 py-3 flex flex-row gap-2 font-bold hover:cursor-pointer"

@@ -27,10 +27,10 @@ const Home = () => {
         </div>
       </div>
       <div className="flex flex-col sm:flex-row w-full h-auto">
-        <div className="w-full h-[1000px] sm:h-[800px] md:w-[70%]">
+        <div className="w-full h-[1000px] sm:h-[1200px]">
           <GridLayout MovieList={currentTab} start={start} end={end} />
         </div>
-        <SidePanelHome />
+        {/* <SidePanelHome /> */}
       </div>
       <Footer />
     </PageLayout>

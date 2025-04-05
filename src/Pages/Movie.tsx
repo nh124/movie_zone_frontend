@@ -143,7 +143,7 @@ const Movie = () => {
           setShowPeopleDetails={setShowPeopleDetails}
           setSelectedImageArray={setSelectedImageArray}
         />
-        <MovieComments movieId={movie_id} />
+        {/* <MovieComments movieId={movie_id} /> */}
         <Footer />
       </PageLayout>
     </div>

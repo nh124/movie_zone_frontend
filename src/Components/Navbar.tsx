@@ -76,7 +76,7 @@ const Navbar = ({
               )}
             </button>
           </div>
-          {storedToken === null ||
+          {/* {storedToken === null ||
           storedToken === "" ||
           storedToken === undefined ? (
             <button
@@ -92,7 +92,7 @@ const Navbar = ({
             >
               <IoPerson size="30" color="white" />
             </button>
-          )}
+          )} */}
         </ul>
         <div
           className={`absolute top-[50px] right-1 w-[250px] h-fit z-30 bg-sky-900 rounded-bl-lg rounded-br-lg flex flex-col font-bold text-gray-400 py-2 px-2 duration-300  ${
