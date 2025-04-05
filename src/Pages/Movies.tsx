@@ -17,7 +17,7 @@ const Movies = () => {
   const [discoverMovies, setDiscoverMovies] = useState<
     Array<ResponseResultType>
   >([]);
-  const [showLogin, setShowLoading] = useState(false);
+  const [showLogin] = useState(false);
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
@@ -86,7 +86,7 @@ const Movies = () => {
   }, [getDiscover, pageIndex, filters, dispatch, submitFilter, length]);
 
   return (
-    <PageLayout showLogin={showLogin} setShowLoading={setShowLoading}>
+    <PageLayout showLogin={showLogin}>
       <GridResize />
       <div>
         <div className="w-full h-auto">

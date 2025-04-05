@@ -11,7 +11,7 @@ import RemoveDuplicatesFilter from "../Rawfiles/RemoveDuplicatesFilter";
 import Footer from "../Components/Footer";
 const SearchResult = () => {
   const { searchedMovie } = useParams();
-  const [showLogin, setShowLoading] = useState(false);
+  const [showLogin] = useState(false);
   const [pageLimit, setPageLimit] = useState(0);
   const [searchedResult, setSearchResult] = useState<ResponseResultType[]>([]);
   const [finalSearchedResult, setFinalSearchedResult] = useState<
@@ -53,7 +53,7 @@ const SearchResult = () => {
   }, [start, end]);
 
   return (
-    <PageLayout showLogin={showLogin} setShowLoading={setShowLoading}>
+    <PageLayout showLogin={showLogin}>
       <GridResize />
       <UpdatePage currentPage="search" />
       <div className="w-full h-screen">

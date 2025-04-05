@@ -1,18 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import logo from "../assets/logo.png";
 import { CiSearch, CiLogout } from "react-icons/ci";
-import { IoCloseOutline, IoPerson } from "react-icons/io5";
+import { IoCloseOutline } from "react-icons/io5";
 import UserInformationManager from "../API/UserInformationManager";
 import { useNavigate } from "react-router-dom";
 import GetUser from "../Hooks/GetUser";
 import Search from "./Search";
 
-const Navbar = ({
-  setShowLoading,
-}: {
-  setShowLoading: React.Dispatch<SetStateAction<boolean>>;
-}) => {
+const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [showUserMany, setShowUserMany] = useState(false);
   const { get_user, setExpiredToken } = UserInformationManager();

@@ -4,17 +4,16 @@ import Navbar from "./Navbar";
 export const PageLayout = (
   props: PropsWithChildren<{
     showLogin: boolean;
-    setShowLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }>
 ) => {
-  const { showLogin, setShowLoading } = props;
+  const { showLogin } = props;
   return (
     <div
       className={`w-full ${
         showLogin ? "h-screen sm:h-screen" : "h-auto sm:h-auto"
       }  bg-[#283747] flex flex-col justify-center items-center overflow-hidden`}
     >
-      <Navbar setShowLoading={setShowLoading} />
+      <Navbar />
       <div
         className={`bg-[#283747] w-full ${
           showLogin ? "h-[95%]" : "h-full"

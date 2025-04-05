@@ -7,7 +7,6 @@ import UpdatePage from "../Components/UpdatePage";
 import GridLayout from "../Components/GridLayout";
 import UserLogin from "../Components/UserLogin";
 import { useState } from "react";
-import SidePanelHome from "../Components/SidePanelHome";
 import Footer from "../Components/Footer";
 const Home = () => {
   const { currentTab } = useSelector((state: any) => state.MovieStatusTab);
@@ -15,7 +14,7 @@ const Home = () => {
   const [showLogin, setShowLoading] = useState(false);
 
   return (
-    <PageLayout showLogin={showLogin} setShowLoading={setShowLoading}>
+    <PageLayout showLogin={showLogin}>
       <UserLogin showLogin={showLogin} setShowLoading={setShowLoading} />
       <SplashImage />
       <GridResize />

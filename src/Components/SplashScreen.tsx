@@ -4,7 +4,6 @@ import ParseMovieDetails from "../Rawfiles/ParseMovieDetails";
 import ScoreCircle from "./ScoreCircle";
 import { FaPlay } from "react-icons/fa";
 import TimeConverter from "../Rawfiles/TimeConverter";
-import AddToFavorites from "./AddToFavorites";
 
 const SplashScreen = ({
   movieId,
@@ -39,25 +38,6 @@ const SplashScreen = ({
   });
   const query_details = GetMovieDetails(movieId.toString(), "details");
   const query_credits = GetMovieDetails(movieId.toString(), "credits");
-  const storedTokenObject = localStorage.getItem("token");
-
-  type TokenInfo = {
-    storedToken: string | undefined;
-    tokenExpired: boolean | undefined;
-  };
-  const getToken = (): TokenInfo => {
-    if (storedTokenObject === null) {
-      return {
-        storedToken: undefined,
-        tokenExpired: undefined,
-      };
-    }
-    const storedTokenJson = JSON.parse(storedTokenObject);
-    const storedToken = storedTokenJson?.token;
-    const tokenExpired = storedTokenJson?.expired;
-    return { storedToken, tokenExpired };
-  };
-  const { storedToken } = getToken();
 
   useEffect(() => {
     const parsedDetails = ParseMovieDetails(query_details, "details");

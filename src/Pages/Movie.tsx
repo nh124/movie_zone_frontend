@@ -14,7 +14,6 @@ import {
 import UserLogin from "../Components/UserLogin";
 import SplashScreen from "../Components/SplashScreen";
 import MovieDetails from "../Components/MovieDetails";
-import MovieComments from "../Components/MovieComments";
 import GetMovieDetails from "../API_PARSER/GetMovieDetails";
 import { IoMdClose } from "react-icons/io";
 import { setNotificationStatus } from "../Redux/NotificationReducer";
@@ -109,7 +108,7 @@ const Movie = () => {
         showImages={showImages}
         setShowImages={setShowImages}
       />
-      <PageLayout showLogin={showLogin} setShowLoading={setShowLoading}>
+      <PageLayout showLogin={showLogin}>
         <button
           className={`w-[250px] sm:w-[340px] h-[50px] mt-[4%] flex items-center bg-[#283747] px-3 rounded-md fixed top-0 right-0 gap-3 text-gray-400 z-50 duration-300 ${
             notificationStatus ? "translate-x-0 " : "translate-x-[100%]"
