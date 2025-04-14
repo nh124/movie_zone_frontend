@@ -22,11 +22,7 @@ import ImageEnlarge from "../Components/ImageEnlarge";
 import Footer from "../Components/Footer";
 const Movie = () => {
   const { movieId } = useParams();
-  type VideoType = {
-    video: {
-      key: string;
-    }[];
-  };
+  type VideoType = [] | any[];
   const getMovieID = (movieId: string | undefined) => {
     if (movieId === undefined) return 0;
     const movieIDInt = parseInt(movieId, 10);
@@ -38,7 +34,7 @@ const Movie = () => {
 
   const [playTrailers, setPlayTrailers] = useState(false);
   const [showLogin, setShowLoading] = useState(false);
-  const [video, setVideo] = useState<VideoType>({ video: [] });
+  const [videos, setVideos] = useState<VideoType>([]);
   const [socials, setSocials] = useState({});
   const { length } = useSelector((state: any) => state.GridSize);
   const { notificationStatus } = useSelector(
@@ -62,10 +58,9 @@ const Movie = () => {
       }, 2000);
     }
   }, [dispatch, notificationStatus]);
-
   useEffect(() => {
     const parsedVideo = ParseMovieDetails(query_videos, "videos");
-    setVideo(parsedVideo);
+    setVideos(parsedVideo);
     setSocials(query_socials);
     dispatch(setTab("Trending"));
     dispatch(setStart(0));
@@ -85,7 +80,7 @@ const Movie = () => {
         <div className="w-full h-full relative">
           <div className="absolute top-[30%] md:top-[10%] left-1/2 transform -translate-x-1/2">
             <VideoPlayer
-              videoId={video?.video?.length > 0 ? video?.video[0]?.key : ""}
+              videos={videos?.length > 0 ? videos : []}
               setPlayTrailers={setPlayTrailers}
             />
           </div>

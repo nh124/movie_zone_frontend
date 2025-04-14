@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Search = ({ showSearch }: { showSearch: boolean }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [search, setSearch] = useState("");
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
+
+  useEffect(() => {
+    if (showSearch && inputRef.current) {
+      inputRef.current.focus();
+    }
+
+    if (!showSearch) {
+      setSearch("");
+    }
+  }, [showSearch]);
 
   return (
     <div
@@ -15,6 +26,8 @@ const Search = ({ showSearch }: { showSearch: boolean }) => {
       <form action={`/search/${search}`} className="w-full h-full">
         <input
           onChange={onChange}
+          ref={inputRef}
+          value={search}
           type="text"
           className="w-full h-full 
           px-3 py-2 bg-gray-700 text-white border border-gray-400 rounded-md focus:outline-none focus:border-blue-3"

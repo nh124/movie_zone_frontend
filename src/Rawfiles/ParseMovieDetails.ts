@@ -45,11 +45,9 @@ const ParseMovieDetails = (movie: any, type: string): any => {
       })),
   };
 
-  const videosParsed = {
-    video: movie?.results
-      ?.filter((video: any) => video?.type === "Trailer")
-      ?.map((video: any) => ({ key: video.key })),
-  };
+  const videosParsed = movie?.results?.filter(
+    (video: any) => video?.type === "Trailer"
+  );
 
   const imagesParsed = {
     backdrops: movie?.backdrops?.map((backdrop: any) => ({
